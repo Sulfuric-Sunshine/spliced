@@ -1,6 +1,6 @@
 angular.module('spliced.result', [])
 
-.controller('ResultController', function ($scope, Result) {
+.controller('ResultController', function ($scope) {
   // Your code here
   $scope.data = {};
 
