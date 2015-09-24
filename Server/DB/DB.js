@@ -1,13 +1,21 @@
-// var Sequelize = require("sequelize");
-// var sequelize = new Sequelize("DBNAME", "root", "", {
-//   host: 'localhost',
-//   dialect: 'mysql',
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/my_database');
 
-//   pool: {
-//     max: 5,
-//     min: 0,
-//     idle: 10000
-//   }
-// });
+var Schema = mongoose.Schema
+ 
+var Drawing = new Schema({
+  numPlayers : Number,
+  count: Number,
+  player_1_id : String,
+  player_2_id : String,
+  player_3_id : String,
+  player_4_id : String
+});
 
-//INSERT SCHEMA HERE.
+var Player = new Schema({
+  firstname: String,
+  lastname: String,
+  image: String,
+  phone: String,
+  email: String
+})

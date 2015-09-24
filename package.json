@@ -22,6 +22,7 @@
     "express-partials": "~0.2.0",
     "express-session": "^1.7.2",
     "forever": "^0.10.11",
+    "mongoose": "^4.1.8",
     "morgan": "^1.1.1",
     "nodemon": "^1.7.0",
     "request": "^2.36.0"
