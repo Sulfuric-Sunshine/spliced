@@ -1,0 +1,30 @@
+{
+  "name": "spliced",
+  "version": "0.0.1",
+  "description": "A game where you and your friends create art!",
+  "main": "./server/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sulfuric-Sunshine/spliced.git"
+  },
+  "author": "Team Sulfuric Sunrise",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sulfuric-Sunshine/spliced/issues"
+  },
+  "dependencies": {
+    "body-parser": "^1.4.3",
+    "ejs": "~0.8.5",
+    "express": "^4.4.5",
+    "express-partials": "~0.2.0",
+    "express-session": "^1.7.2",
+    "forever": "^0.10.11",
+    "morgan": "^1.1.1",
+    "nodemon": "^1.7.0",
+    "request": "^2.36.0"
+  },
+  "homepage": "https://github.com/Sulfuric-Sunshine/spliced#readme"
+}
