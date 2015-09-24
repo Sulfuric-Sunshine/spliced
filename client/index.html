@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html ng-app='spliced'>
+  <head>
+    <meta charset="utf-8" />
+    <title>Spliced</title>
+    <link rel="stylesheet" type="text/css" href="styles/style.css" />
+  </head>
+  <body>
+    <h1>Spliced</h1>
+
+
+
+    <!-- the ng-view directive is where our templates will be loaded into when naviagted to -->
+    <div ng-view></div>
+
+    <script src="../bower_components/angular/angular.js"></script>
+    <script src="../bower_components/angular-route/angular-route.js"></script>
+    <script src="../bower_components/angular-canvas-painter/dist/angular-canvas-painter.js"></script>
+
+    <script src="app/draw/draw.js"></script>
+    <script src="app/result/result.js"></script>
+    <script src="app/services/services.js"></script>
+    <script src="app/app.js"></script>
+  </body>
+</html>
