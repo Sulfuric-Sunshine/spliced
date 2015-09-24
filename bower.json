@@ -1,0 +1,24 @@
+{
+  "name": "spliced",
+  "version": "0.0.0",
+  "homepage": "https://github.com/Sulfuric-Sunshine/spliced",
+  "authors": [
+    "Hack Reactor Students <accounts@hackreactor.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.6",
+    "angular-route": "~1.4.6"
+  }
+}
