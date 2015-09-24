@@ -1,22 +1,20 @@
 angular.module('spliced.draw', [])
 
-.controller('DrawController', function ($scope, $location, Result) {
+.controller('DrawController', function ($scope, $route, Draw) {
   // drawing info will go here.
   $scope.data = {};
 
 
   $scope.data.drawing;
-  $scope.data.playerId = $location.path();
+  $scope.data.playerId = $route.current.params.playerId;
 
   // $scope.data.image = // ng-model for the canvas itself, which we'll save
 
   $scope.save = function() { 
     var image = document.getElementById("pwCanvasMain").toDataURL();  
-
-    Result.save(image);
+    Draw.save(image, $scope.data.playerId);
     // send the image to the server.
     console.log(image);
-    console.log($scope.data.playerId);
   } 
 
 });
