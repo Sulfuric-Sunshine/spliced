@@ -78,6 +78,7 @@ module.exports = function (app, express) {
       }
     });
 
+
     // if (!db.started) {
     //   var drawing = new db.drawing();
     //   db.started = true;
@@ -91,6 +92,7 @@ module.exports = function (app, express) {
     // var player = new db.player({  });
 
   });
+
   app.get('/game/', function(req, res){
     //if count is 4
     //send back all four images.
