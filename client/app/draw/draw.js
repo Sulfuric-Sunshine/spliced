@@ -14,7 +14,6 @@ angular.module('spliced.draw', [])
     var image = document.getElementById("pwCanvasMain").toDataURL();  
     Draw.save(image, $scope.data.playerId);
     // send the image to the server.
-    console.log(image);
   } 
 
 });
