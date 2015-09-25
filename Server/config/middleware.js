@@ -2,6 +2,7 @@ var bodyParser = require('body-parser');
 var helpers = require('./helpers.js'); // our custom middleware
 var db = require('../DB/DB.js');
 var router = require('../routes.js');
+var fs = require('fs');
 
 
 
@@ -18,11 +19,31 @@ module.exports = function (app, express) {
   app.get('/game/:username', function(req, res){
     //if no game in DB, make the game.
   });
+
+
   app.post('/game/:username', function(req, res){
     //save the image
     //from the username - make a player - give it the image link and etc.
     //set the player id in the game
     //increasing the count.
+    var image = req.body.image;
+    var username = req.params.username;
+    fs.writeFile(path.join(__dirname, '/../drawings/',  'messageLog.JSON'))
+
+    
+
+    // if (!db.started) {
+    //   var drawing = new db.drawing();
+    //   db.started = true;
+    // }
+    // if (db.drawing.find( { username: username },function (err, drawing) {
+    //   if (err) res.send(500);
+    //   var player = new db.player();
+
+    // }))
+
+    // var player = new db.player({  });
+
   });
   app.get('/game/', function(req, res){
     //if count is 4
