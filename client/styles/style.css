@@ -149,3 +149,17 @@ input[type=url]:focus {
 input.ng-invalid.ng-dirty {
   border: 1px solid red;
 }
+
+.canvas-container canvas {
+  border: 1px solid #eee;
+}
+
+.container {
+  width: 100%;
+}
+
+@media (max-width: 400px) {
+  img {
+    width: 100%;
+  }
+}
