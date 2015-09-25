@@ -54,31 +54,39 @@ module.exports = function (app, express) {
       } else {
         //db.player.update or insert
         console.log("game is started: " + db.started);
-        db.player.findOneAndUpdate({user_name: userName}, {image:imagePath}, {upsert: true}, function (err, player) {
+        db.player.findOneAndUpdate({user_name: userName}, {image:imagePath}, {upsert: true, 'new': true}, function (err, player) {
           if(!db.started) {
 
             var newGame = {num_players: 4, count: 1};
             newGame[userKey] = player.id;
             db.started = true;
             console.log("game is started: " + db.started);
-            //console.log(newGame);
-            //console.log(resp);
-            //todo, figure out how to get the player ID.
+            //update the counted to true - prevents counting a player twice.
+            db.player.findOneAndUpdate({user_name: userName}, {counted: true}, {upsert: true, 'new': true}, function (err, player) {
+              console.log("Player counted updated.");
+            });
             db.game.update({game_name: "game"}, newGame, {upsert: true, 'new': true}, function(err, game){
               return res.sendStatus(201);
             });
           } else {
             var gameObj = {};
             gameObj[userKey] = player.id;
-            gameObj.$inc = {'count':1};
-            console.log(gameObj);
-            db.game.findOneAndUpdate({game_name: "game"}, gameObj, {upsert: true, 'new': true}, function(err, game){
-              if (game.count === game.num_players) {
-                console.log("Let's invoke the image stitcher function now");
-                // invoke create unified image function 
-              }
-              return res.sendStatus(201);
-            });
+            if(!player.counted){
+              gameObj.$inc = {'count':1};
+              console.log(gameObj);
+              db.player.findOneAndUpdate({user_name: userName}, {counted: true, 'new': true}, {upsert: true}, function (err, player) {
+                console.log("Player counted updated.");
+              });
+              db.game.findOneAndUpdate({game_name: "game"}, gameObj, {upsert: true, 'new': true}, function(err, game){
+                console.log("Checking number of players");
+                console.log(game.count + " = " + game.num_players);
+                if (game.count === game.num_players) {
+                  console.log("Let's invoke the image stitcher function now");
+                  // invoke create unified image function 
+                }
+              });
+            }
+            return res.sendStatus(201); 
           }
         });
         console.log("File write success");
