@@ -31,7 +31,6 @@ module.exports = function (app, express) {
 
     //establishing params
     var image = req.body.image;
-    console.log("The image at req.body.image is", image);
     var userName = req.params.username;
     var userKey = '';
     if(userName === 'player1'){
@@ -44,11 +43,11 @@ module.exports = function (app, express) {
       userKey = 'player_4_id';
     }
 
-    var imagePath = path.join(__dirname, '/../assets/drawings/', userName);
-
+    var imagePath = path.join(__dirname, '/../assets/drawings/', userName + '.png');
+    var imageBuffer = helpers.decodeBase64Image(image);
     //First we create the image so we can use it to create the player.
     // image is created as a base 64 string
-    fs.writeFile(imagePath, image, function(err){
+    fs.writeFile(imagePath, imageBuffer.data, function(err){
       if(err){
         console.log("There was an error: " + err);
         res.sendStatus(500);
@@ -73,7 +72,7 @@ module.exports = function (app, express) {
             gameObj[userKey] = player.id;
             gameObj.$inc = {'count':1};
             console.log(gameObj);
-            db.game.findOneAndUpdate({game_name: "game"}, gameObj, {upsert: true}, function(err, game){
+            db.game.findOneAndUpdate({game_name: "game"}, gameObj, {upsert: true, 'new': true}, function(err, game){
               if (game.count === game.num_players) {
                 console.log("Let's invoke the image stitcher function now");
                 // invoke create unified image function 
