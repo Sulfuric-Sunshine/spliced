@@ -41,9 +41,13 @@ angular.module('spliced.services', [])
   services.save = function(image, playerId) {
     services.drawings[playerId] = image;
     console.log(services.drawings);
-    // write post request here! :) 
-    // return $http.post('/game/')
-  }
+    // write post request here! :)
+    return $http({
+      method: 'POST',
+      url: '/game/'+ playerID,
+      data: image
+    });
+  };
 
 
 
