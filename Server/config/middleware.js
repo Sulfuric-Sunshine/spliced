@@ -4,7 +4,7 @@ var db = require('../DB/DB.js');
 var router = require('../routes.js');
 var path = require('path');
 var fs = require('fs');
-
+var gm = require('gm');
 
 
 module.exports = function (app, express) {
@@ -17,8 +17,9 @@ module.exports = function (app, express) {
 
   // *********Set up our routes to manage calls to our REST API.
   //app.use("/game", router);
-  app.get('/game/:username', function(req, res){
+  app.get('/foo', function(req, res){
     //if no game in DB, make the game.
+    helpers.makeImages();
   });
 
 
@@ -83,6 +84,7 @@ module.exports = function (app, express) {
                 if (game.count === game.num_players) {
                   console.log("Let's invoke the image stitcher function now");
                   // invoke create unified image function 
+                  helpers.makeImages();
                 }
               });
             }
