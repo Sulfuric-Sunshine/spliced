@@ -38,6 +38,15 @@ angular.module('spliced.services', [])
     })
   }
 
+  services.postDrawings = function(drawingLink) {
+    //this is the post request that sends the
+    //drawingLink/image to the database.  
+    return $http({
+      method: 'POST',
+      url: '/game/:username',
+      data: drawingLink
+    })
+  }
   services.save = function(image, playerId) {
     services.drawings[playerId] = image;
     console.log(services.drawings);
