@@ -1,23 +1,26 @@
 <!DOCTYPE html>
 <html ng-app='spliced'>
   <head>
+    <meta name="viewport" content="initial-scale=1">
     <meta charset="utf-8" />
     <title>Spliced</title>
     <link rel="stylesheet" type="text/css" href="styles/style.css" />
   </head>
   <body>
-    <h1>Spliced</h1>
+    <div class="container">
+      <h1>Spliced</h1>
 
-    <!-- the ng-view directive is where our templates will be loaded into when naviagted to -->
-    <div ng-view></div>
+      <!-- the ng-view directive is where our templates will be loaded into when naviagted to -->
+      <div ng-view></div>
 
-    <script src="lib/angular/angular.js"></script>
-    <script src="lib/angular-route/angular-route.js"></script>
-    <script src="lib/angular-canvas-painter/dist/angular-canvas-painter.js"></script>
+      <script src="lib/angular/angular.js"></script>
+      <script src="lib/angular-route/angular-route.js"></script>
+      <script src="lib/angular-canvas-painter/dist/angular-canvas-painter.js"></script>
 
-    <script src="app/draw/draw.js"></script>
-    <script src="app/result/result.js"></script>
-    <script src="app/services/services.js"></script>
-    <script src="app/app.js"></script>
+      <script src="app/draw/draw.js"></script>
+      <script src="app/result/result.js"></script>
+      <script src="app/services/services.js"></script>
+      <script src="app/app.js"></script>
+    </div>
   </body>
 </html>
