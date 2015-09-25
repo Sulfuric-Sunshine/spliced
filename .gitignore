@@ -4,4 +4,4 @@ bower_components/
 client/lib
 build/
 dist/
-Server/assets
+Server/assets/drawings/*

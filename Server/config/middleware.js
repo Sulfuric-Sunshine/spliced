@@ -34,13 +34,13 @@ module.exports = function (app, express) {
     var userName = req.params.username;
     var userKey = '';
     if(userName === 'player1'){
-      userKey = 'player_1_ID';
+      userKey = 'player_1_id';
     } else if(userName === 'player2'){
-      userKey = 'player_2_ID';
+      userKey = 'player_2_id';
     } else if(userName === 'player3'){
-      userKey = 'player_3_ID';
+      userKey = 'player_3_id';
     } else {
-      userKey = 'player_4_ID';
+      userKey = 'player_4_id';
     }
 
     var imagePath = path.join(__dirname, '/../assets/drawings/', userName);
@@ -52,24 +52,26 @@ module.exports = function (app, express) {
         res.sendStatus(500);
       } else {
         //db.player.update or insert
+        console.log("game is started: " + db.started);
         db.player.findOneAndUpdate({user_name: userName}, {image:imagePath}, {upsert: true}, function (err, player) {
           if(!db.started) {
 
             var newGame = {num_players: 4, count: 1};
-            newGame[userKey] = player._id;
-            console.log(newGame);
+            newGame[userKey] = player.id;
+            db.started = true;
+            console.log("game is started: " + db.started);
+            //console.log(newGame);
             //console.log(resp);
             //todo, figure out how to get the player ID.
-            db.game.update({}, newGame, {upsert: true}, function(err, game){
-              db.started = true;
+            db.game.update({game_name: "game"}, newGame, {upsert: true}, function(err, game){
               return res.sendStatus(201);
             });
           } else {
-            var gameObj = {
-              count: count + 1
-            };
-            gameObj[userKey] = player._id;
-            db.game.findOneAndUPdate({}, userObj, {upsert: true}, function(err, game){
+            var gameObj = {};
+            gameObj[userKey] = player.id;
+            gameObj.$inc = {'count':1};
+            console.log(gameObj);
+            db.game.findOneAndUpdate({game_name: "game"}, gameObj, {upsert: true}, function(err, game){
               return res.sendStatus(201);
             });
           }
