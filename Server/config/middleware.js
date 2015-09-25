@@ -31,6 +31,7 @@ module.exports = function (app, express) {
 
     //establishing params
     var image = req.body.image;
+    console.log("The image at req.body.image is", image);
     var userName = req.params.username;
     var userKey = '';
     if(userName === 'player1'){
@@ -46,6 +47,7 @@ module.exports = function (app, express) {
     var imagePath = path.join(__dirname, '/../assets/drawings/', userName);
 
     //First we create the image so we can use it to create the player.
+    // image is created as a base 64 string
     fs.writeFile(imagePath, image, function(err){
       if(err){
         console.log("There was an error: " + err);
@@ -63,7 +65,7 @@ module.exports = function (app, express) {
             //console.log(newGame);
             //console.log(resp);
             //todo, figure out how to get the player ID.
-            db.game.update({game_name: "game"}, newGame, {upsert: true}, function(err, game){
+            db.game.update({game_name: "game"}, newGame, {upsert: true, 'new': true}, function(err, game){
               return res.sendStatus(201);
             });
           } else {
@@ -72,6 +74,10 @@ module.exports = function (app, express) {
             gameObj.$inc = {'count':1};
             console.log(gameObj);
             db.game.findOneAndUpdate({game_name: "game"}, gameObj, {upsert: true}, function(err, game){
+              if (game.count === game.num_players) {
+                console.log("Let's invoke the image stitcher function now");
+                // invoke create unified image function 
+              }
               return res.sendStatus(201);
             });
           }
