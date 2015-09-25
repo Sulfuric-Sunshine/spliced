@@ -21,6 +21,7 @@ var playerSchema = new Schema({
   image: String,
   phone: String,
   email: String,
+  counted: Boolean,
   user_name: String
 });
 
