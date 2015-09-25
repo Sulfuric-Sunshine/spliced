@@ -2,8 +2,10 @@ var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/my_database');
 
 var Schema = mongoose.Schema
+
+var started = false;
  
-var Drawing = new Schema({
+var drawingSchema = new Schema({
   numPlayers : Number,
   count: Number,
   player_1_id : String,
@@ -12,10 +14,17 @@ var Drawing = new Schema({
   player_4_id : String
 });
 
-var Player = new Schema({
+var playerSchema = new Schema({
   firstname: String,
   lastname: String,
   image: String,
   phone: String,
   email: String
 })
+
+var Drawing = mongoose.model('Drawing', drawingSchema);
+var Player = mongoose.model('Player', playerSchema);
+
+module.exports.drawing = Drawing;
+module.exports.player = Player;
+module.exports.started = started;
