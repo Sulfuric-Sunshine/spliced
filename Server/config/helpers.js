@@ -31,13 +31,13 @@ module.exports = {
 
   makeImages: function() {
     var readStream = fs.createReadStream("Server/assets/drawings/player1.png");
-
     // using http://aheckmann.github.io/gm/docs.html#append 
       gm(readStream)
       .append("Server/assets/drawings/player2.png", "Server/assets/drawings/player3.png", "Server/assets/drawings/player4.png")
       .stream(function (err, stdout, stderr) {
         var writeStream = fs.createWriteStream('Server/assets/images/final.png');
         stdout.pipe(writeStream);
+        // callback();
     });
   }
 

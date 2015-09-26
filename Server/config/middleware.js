@@ -17,9 +17,11 @@ module.exports = function (app, express) {
 
   // *********Set up our routes to manage calls to our REST API.
   //app.use("/game", router);
-  app.get('/foo', function(req, res){
+  app.get('/show', function(req, res){
     //if no game in DB, make the game.
+    // this is just a test to see if the make images function works when all the images are present. 
     helpers.makeImages();
+
   });
 
 
@@ -84,7 +86,10 @@ module.exports = function (app, express) {
                 if (game.count === game.num_players) {
                   console.log("Let's invoke the image stitcher function now");
                   // invoke create unified image function 
-                  helpers.makeImages();
+                  helpers.makeImages(function() {
+                    if (err) throw err;
+                    console.log("Done drawing the image, check the image folder!");
+                  });
                 }
               });
             }
