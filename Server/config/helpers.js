@@ -1,5 +1,5 @@
 var fs = require('fs');
-var gm = require('gm');
+var gm = require('gm').subClass({imageMagick: true});
 
 module.exports = {
   errorLogger: function (error, req, res, next) {
@@ -35,10 +35,29 @@ module.exports = {
       gm(readStream)
       .append("Server/assets/drawings/player2.png", "Server/assets/drawings/player3.png", "Server/assets/drawings/player4.png")
       .stream(function (err, stdout, stderr) {
+        console.log("Streaming the image now");
         var writeStream = fs.createWriteStream('Server/assets/images/final.png');
         stdout.pipe(writeStream);
         // callback();
     });
+  },
+
+  showImage: function(callback) {
+
+    // first, check to see if the final image exists. 
+    fs.stat('Server/assets/images/final.png', function(err, res) {
+      if (err) {
+        console.log("there was an error", err);
+        callback(err);
+      }
+
+      // if the image exists, then read the file and send it back to the user inside callback function. 
+      console.log('file exists');
+      fs.readFile('Server/assets/images/final.png', function(err, data) {
+        if (err) console.log(err) 
+        callback(data)
+      });
+    })
   }
 
 };
