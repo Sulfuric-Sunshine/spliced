@@ -21,7 +21,7 @@ module.exports = function (app, express) {
     //if no game in DB, make the game.
     // this is just a test to see if the make images function works when all the images are present. 
     helpers.showImage(function(data) {
-      res.send(data);
+      res.end(data, 'binary');
     })
     
 
