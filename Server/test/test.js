@@ -1,70 +1,49 @@
 var assert = chai.assert;
 var should = chai.should();
 var expect = chai.expect;
-var helpers = require("../config/helpers.js")
-  // for when we eventually want to test against mock data
+var supertest = require("supertest");
+var helpers = require("../config/helpers.js");
+var middleware = require("../config/middleware.js");
+// for when we eventually want to test against mock data
 var fs = require('fs');
 var path = require('path');
 
 describe('helper functions', function() {
-    describe('errorLogger', function() {
 
-      it('should be a function', function() {
+  describe('errorLogger', function() {
 
-        helpers.errorLogger.should.be.a('function');
+    it('should be a function', function() {
 
-        helpers.errorLogger..should.not.be.a('object');
+      helpers.errorLogger.should.be.a('function');
 
-        expect(helpers.errorLogger.bind(null, error)).to.throw(error.stack);
+      helpers.errorLogger.should.not.be.a('object');
 
-      });
+      expect(helpers.errorLogger.bind(null, error, req, res, next)).to.throw(error.stack);
 
-      describe('errorLogger', function() {
-
-        it('should be a function', function() {
-
-          helpers.errorLogger.should.be.a('function');
-
-          helpers.errorLogger..should.not.be.a('object');
-
-          expect(helpers.errorLogger.bind(null, error)).to.throw(error.stack);
-
-        });
-
-        // it('should have all the necessary methods', function() {
-
-        //   todo.should.have.property('util');
-
-        //   todo.util.trimTodoName.should.be.a('function');
-
-        //   todo.util.isValidTodoName.should.be.a('function');
-
-        //   todo.util.getUniqueId.should.be.a('function');
-        //   assert.typeOf(todo.util.isValidTodoName, 'function');
-
-        // });
-      });
     });
 
-    describe('the todo.util methods', function() {
-      describe('the trimTodoName method', function() {
-        it('should trim whitespace off provided names', function() {
-          expect(todo.util.trimTodoName("name  ")).to.equal("name");
-          expect(todo.util.trimTodoName("names ")).to.have.length(5);
-        })
-      })
+  });
+  describe('errorHandler', function() {
 
-      describe('the isValidTodoName method', function() {
-        it('should validate names provided', function() {
-          expect(todo.util.isValidTodoName("  ")).to.equal(false);
-          expect(todo.util.isValidTodoName("e")).to.not.equal(true);
-          assert.ok(todo.util.isValidTodoName("Fareez"));
-        })
-      })
+    it('should be a function', function() {
 
-      describe('the getUniqueId method', function() {
-        it('should increment ids', function() {
-          expect(todo.util.getUniqueId()).to.equal(1);
-        })
+      helpers.errorHandler.should.be.a('function');
+
+      helpers.errorHandler.should.not.be.a('object');
+
+      expect(helpers.errorLogger(res._responseCode).to.equal(500));
+
+    });
+  });
+
+  describe('decodeBase64Image', function() {
+    describe('the trimTodoName method', function() {
+      it('should return a response object', function() {
+        expect(helpers.decodeBase64Image.bind(null, "hello").to.be.a('object'));
       })
     })
+
+
+  })
+  // TODO: tests for makeimages and showImage
+})

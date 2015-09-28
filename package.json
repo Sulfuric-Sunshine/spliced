@@ -32,5 +32,8 @@
     "request": "^2.36.0",
     "sinon": "^1.17.1"
   },
-  "homepage": "https://github.com/Sulfuric-Sunshine/spliced#readme"
+  "homepage": "https://github.com/Sulfuric-Sunshine/spliced#readme",
+  "devDependencies": {
+    "supertest": "^1.1.0"
+  }
 }
