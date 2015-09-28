@@ -20,7 +20,10 @@ module.exports = function (app, express) {
   app.get('/show', function(req, res){
     //if no game in DB, make the game.
     // this is just a test to see if the make images function works when all the images are present. 
-    helpers.makeImages();
+    helpers.showImage(function(data) {
+      res.end(data, 'binary');
+    })
+    
 
   });
 
@@ -59,7 +62,6 @@ module.exports = function (app, express) {
         console.log("game is started: " + db.started);
         db.player.findOneAndUpdate({user_name: userName}, {image:imagePath}, {upsert: true, 'new': true}, function (err, player) {
           if(!db.started) {
-
             var newGame = {num_players: 4, count: 1};
             newGame[userKey] = player.id;
             db.started = true;
