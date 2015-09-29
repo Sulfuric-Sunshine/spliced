@@ -22,6 +22,8 @@ module.exports = function (app, express) {
   app.get('/game', function(req, res){
     helpers.getFinalImageURL(function(pathToImage) {
       res.end(pathToImage);
+    }, function(pathToImage) {
+      res.end('');
     })
 
   });
