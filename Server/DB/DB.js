@@ -12,7 +12,9 @@ var gameSchema = new Schema({
   player_1_id : String,
   player_2_id : String,
   player_3_id : String,
-  player_4_id : String
+  player_4_id : String,
+  game_started: Boolean,
+  game_finished: Boolean
 });
 
 var playerSchema = new Schema({
