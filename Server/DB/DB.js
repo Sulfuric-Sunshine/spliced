@@ -8,7 +8,7 @@ var started = false;
 var gameSchema = new Schema({
   num_players : Number,
   count: Number,
-  game_name: String,
+  game_code: String,
   player_1_id : String,
   player_2_id : String,
   player_3_id : String,

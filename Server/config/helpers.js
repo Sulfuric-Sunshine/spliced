@@ -71,7 +71,20 @@ module.exports = {
 
   },
 
-  createNewGame: function(player, userKey, userName, res) {
+  createUniqueGameCode: function(){
+  
+    var text = "";
+    var possible = "abcdefghijklmnopqrstuvwxyz0123456789";
+
+    for( var i=0; i < 4; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+
+  },
+
+  createNewGameOld: function(player, userKey, userName, res) {
+
     var newGame = {num_players: 4, count: 1};
     newGame[userKey] = player.id;
     //need to change to update in the db.
@@ -82,9 +95,17 @@ module.exports = {
       console.log("Player counted updated.");
     });
     //puts the new game into the database
-    db.game.update({game_name: "game"}, newGame, {upsert: true, 'new': true}, function(err, game){
+    db.game.update({game_code: code}, newGame, {upsert: true, 'new': true}, function(err, game){
       return res.sendStatus(201);
     });
+  },
+
+  createNewGame: function(res){
+    var code = this.createUniqueGameCode();
+    console.log("the unique code is:" + code);
+    var game = new db.game({game_code: code}).save();
+    console.log('the game_code is ', game.game_code);
+    res.send(code);
   },
 
   //update a game if it already exists
@@ -101,7 +122,7 @@ module.exports = {
         console.log("Player counted updated.");
       });
       //update the game with the new player information
-      db.game.findOneAndUpdate({game_name: "game"}, gameObj, {upsert: true, 'new': true}, function(err, game){
+      db.game.findOneAndUpdate({game_code: "game"}, gameObj, {upsert: true, 'new': true}, function(err, game){
         //if all players have submitted drawings
         if (game.count === game.num_players) {
           console.log("Let's invoke the image stitcher function now");

@@ -19,16 +19,22 @@ module.exports = function (app, express) {
   
   // This gets the final image on the /game page. 
   // **NB** Later on we will replace '/game' with the actual game id. 
-  app.get('/game', function(req, res){
+  app.get('/finalresult', function(req, res){
+    //for succesful request:
     helpers.getFinalImageURL(function(pathToImage) {
       res.end(pathToImage);
-    }, function(pathToImage) {
+    }, //for errors
+    function(pathToImage) {
       res.end('');
     })
 
   });
 
+  app.get('/game', function(req, res){
+    helpers.createNewGame(res);
+  });
 
+  
   app.post('/game/:username', function(req, res){
     //save the image
     //from the username - make a player - give it the image link and etc.

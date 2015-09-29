@@ -4,14 +4,15 @@ angular.module('spliced.services', [])
   var services = {};
 
   services.getFinalImage = function(callback, errorCallback) {
-    $http.get('/game')
+    // TODO: might change this later
+    $http.get('/finalresult')
     .then(function(finalImageURL) { 
       callback(finalImageURL.data)
     }, function(err) {
       console.log("There was an error retrieving the final image URL.");
       errorCallback(err);
-    })
-  }
+    });
+  };
 
   services.save = function(image, playerId) {
     console.log("Inside services, the image is", image);
@@ -22,6 +23,15 @@ angular.module('spliced.services', [])
       console.log("The response is", response);
     }, function(err) {
       console.log("The error is", err)
+    });
+  };
+
+  services.createGame = function(callback) {
+    $http.get('/game')
+    .then(function (gameCode) {
+      callback(gameCode.data)
+    }, function(err) {
+      console.log('There was an error getting the game code.');
     });
   };
 

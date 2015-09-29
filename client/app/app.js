@@ -3,10 +3,15 @@ angular.module('spliced', [
   'spliced.draw',
   'spliced.result',
   'ngRoute',
-  'pw.canvas-painter'
+  'pw.canvas-painter',
+  'spliced.home'
 ])
 .config(function ($routeProvider, $httpProvider) {
   $routeProvider
+    .when('/', {
+      templateUrl: 'app/home/home.html',
+      controller: 'HomeController'
+    })
     .when('/game', {
       templateUrl: 'app/result/result.html',
       controller: 'ResultController'
