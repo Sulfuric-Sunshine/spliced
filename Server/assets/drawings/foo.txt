@@ -1,0 +1,3 @@
+This text file is just here to make sure that the `clients/uploads` directory persists.
+Git does not let you commit empty directories.
+See http://stackoverflow.com/questions/115983/how-can-i-add-an-empty-directory-to-a-git-repository. 
