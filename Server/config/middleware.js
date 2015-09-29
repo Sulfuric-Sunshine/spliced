@@ -16,13 +16,14 @@ module.exports = function (app, express) {
   app.use(express.static(__dirname + '/../../client'));  //rename to whatever the client location is.
 
   // *********Set up our routes to manage calls to our REST API.
-  //app.use("/game", router);
-  app.get('/show', function(req, res){
-    //if no game in DB, make the game.
-    // this is just a test to see if the make images function works when all the images are present. 
-    helpers.showImage(function(data) {
-      res.end(data, 'binary');
-    });
+  
+  // This gets the final image on the /game page. 
+  // **NB** Later on we will replace '/game' with the actual game id. 
+  app.get('/game', function(req, res){
+    helpers.getFinalImageURL(function(pathToImage) {
+      res.end(pathToImage);
+    })
+
   });
 
 

@@ -31,35 +31,41 @@ module.exports = {
   },
 
   makeImages: function() {
+    console.log("---------");
+    console.log("makeImages was invoked... making images");
+    console.log("---------");
+
     var readStream = fs.createReadStream("Server/assets/drawings/player1.png");
     // using http://aheckmann.github.io/gm/docs.html#append 
       gm(readStream)
       .append("Server/assets/drawings/player2.png", "Server/assets/drawings/player3.png", "Server/assets/drawings/player4.png")
       .stream(function (err, stdout, stderr) {
         console.log("Streaming the image now");
-        var writeStream = fs.createWriteStream('Server/assets/images/final.png');
+        var writeStream = fs.createWriteStream('client/uploads/game.png');
         stdout.pipe(writeStream);
         // callback();
     });
   },
 
-  showImage: function(callback) {
+  getFinalImageURL: function(callback) {
+
+    // **NB** this finalImageURL is hard coded right now, but later it should be path_to_images/gameID.png
+    var finalImageURL = 'client/uploads/game.png'; 
 
     // first, check to see if the final image exists. 
-    fs.stat('Server/assets/images/final.png', function(err, res) {
+    fs.stat(finalImageURL, function(err, res) {
       if (err) {
         console.log("there was an error", err);
         callback(err);
       }
-
-      // if the image exists, then read the file and send it back to the user inside callback function. 
+      // if the image exists, then send the path to the image onward. 
       console.log('file exists');
-      fs.readFile('Server/assets/images/final.png', function(err, data) {
-        if (err) console.log(err);
-        callback(data);
-      });
-    });
+      var fixedFinalImageURL = finalImageURL.slice(6);
+      console.log("Fixed finalImageURL is", fixedFinalImageURL);
+      callback(fixedFinalImageURL);
+    })
   },
+
 
   //gameid, playerid, url to image
   updatePlayer: function() {
@@ -101,7 +107,7 @@ module.exports = {
         if (game.count === game.num_players) {
           console.log("Let's invoke the image stitcher function now");
           // invoke create unified image function 
-          this.makeImages(function() {
+          module.exports.makeImages(function() {
             if (err) throw err;
             console.log("Done drawing the image, check the image folder!");
           });
@@ -110,5 +116,4 @@ module.exports = {
     }
     return res.sendStatus(201); 
   }
-
-};
+}
