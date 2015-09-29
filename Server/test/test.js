@@ -82,30 +82,25 @@ describe('middleware API', function() {
       done();
     });
   });
-
-  it('assigns a user key properly', function(done) {
+ it('assigns a user key properly', function(done) {
     request(app)
-      .post('/game/1')
+      .post('/game/:username')
       .send({
         image: "image/png",
         username: "player1",
         userKey: ""
       })
-    //.expect(201)
-    // .expect(res.body.should.have.property("userKey"))
+    // .expect(201)
+    .expect(function(res) {
+      res.body.userKey === "player_1_id"
+    })
+
     // .expect()
-    // var assert = require('assert');
-    // request
-    //   .get('/foo')
-    //   .end(function(err, result) {
-    //     assert.equal(result.body.foo, 'Bar');
-    //     done();
-    //   });
 
 
     .end(function(err, res) {
       if (err) return done(err);
-      assert.equal(res.body.should.have.property("userKey"))
+
       done();
     })
 
