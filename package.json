@@ -4,7 +4,9 @@
   "description": "A game where you and your friends create art!",
   "main": "./server/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha Server/test/test.js; RES=$?; kill %1; exit $RES",
+    "postinstall": "node node_modules/bower/bin/bower install",
+    "start": "node Server/server.js"
   },
   "repository": {
     "type": "git",
@@ -17,6 +19,7 @@
   },
   "dependencies": {
     "body-parser": "^1.4.3",
+    "bower": "^1.5.3",
     "chai": "^3.3.0",
     "ejs": "~0.8.5",
     "express": "^4.4.5",
@@ -25,15 +28,20 @@
     "forever": "^0.10.11",
     "fs": "0.0.2",
     "gm": "^1.20.0",
+    "grunt": "^0.4.5",
+    "grunt-cli": "^0.1.13",
+    "grunt-mocha-test": "^0.12.7",
+    "grunt-nodemon": "^0.4.0",
+    "grunt-shell": "^1.1.2",
     "mocha": "^2.3.3",
     "mongoose": "^4.1.8",
-    "morgan": "^1.6.1",
+    "morgan": "^1.1.1",
     "nodemon": "^1.7.0",
-    "request": "^2.36.0",
-    "sinon": "^1.17.1"
+    "request": "^2.36.0"
   },
   "homepage": "https://github.com/Sulfuric-Sunshine/spliced#readme",
   "devDependencies": {
+    "grunt-npm-install": "^0.2.0",
     "supertest": "^1.1.0"
   }
 }
