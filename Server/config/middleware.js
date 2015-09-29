@@ -22,9 +22,7 @@ module.exports = function (app, express) {
     // this is just a test to see if the make images function works when all the images are present. 
     helpers.showImage(function(data) {
       res.end(data, 'binary');
-    })
-    
-
+    });
   });
 
 
@@ -36,6 +34,7 @@ module.exports = function (app, express) {
     //console.log(req.body);
 
     //establishing params
+    //setting the userkeys based on the username from the client
     var image = req.body.image;
     var userName = req.params.username;
     var userKey = '';
@@ -49,53 +48,27 @@ module.exports = function (app, express) {
       userKey = 'player_4_id';
     }
 
+    //creates path for the image
     var imagePath = path.join(__dirname, '/../assets/drawings/', userName + '.png');
     var imageBuffer = helpers.decodeBase64Image(image);
     //First we create the image so we can use it to create the player.
     // image is created as a base 64 string
+
+    //writes image to a file. we don't actually need to do this in a callback
     fs.writeFile(imagePath, imageBuffer.data, function(err){
       if(err){
         console.log("There was an error: " + err);
         res.sendStatus(500);
       } else {
         //db.player.update or insert
-        console.log("game is started: " + db.started);
+        //this finds the user document in the db and either creates it or updates it (if it already exists).
         db.player.findOneAndUpdate({user_name: userName}, {image:imagePath}, {upsert: true, 'new': true}, function (err, player) {
+          //if game hasn't started. 
           if(!db.started) {
-            var newGame = {num_players: 4, count: 1};
-            newGame[userKey] = player.id;
-            db.started = true;
-            console.log("game is started: " + db.started);
-            //update the counted to true - prevents counting a player twice.
-            db.player.findOneAndUpdate({user_name: userName}, {counted: true}, {upsert: true, 'new': true}, function (err, player) {
-              console.log("Player counted updated.");
-            });
-            db.game.update({game_name: "game"}, newGame, {upsert: true, 'new': true}, function(err, game){
-              return res.sendStatus(201);
-            });
+            helpers.createNewGame(player, userKey, userName, res);
+
           } else {
-            var gameObj = {};
-            gameObj[userKey] = player.id;
-            if(!player.counted){
-              gameObj.$inc = {'count':1};
-              console.log(gameObj);
-              db.player.findOneAndUpdate({user_name: userName}, {counted: true, 'new': true}, {upsert: true}, function (err, player) {
-                console.log("Player counted updated.");
-              });
-              db.game.findOneAndUpdate({game_name: "game"}, gameObj, {upsert: true, 'new': true}, function(err, game){
-                console.log("Checking number of players");
-                console.log(game.count + " = " + game.num_players);
-                if (game.count === game.num_players) {
-                  console.log("Let's invoke the image stitcher function now");
-                  // invoke create unified image function 
-                  helpers.makeImages(function() {
-                    if (err) throw err;
-                    console.log("Done drawing the image, check the image folder!");
-                  });
-                }
-              });
-            }
-            return res.sendStatus(201); 
+            helpers.updateGame(player, userKey, userName, res);
           }
         });
         console.log("File write success");

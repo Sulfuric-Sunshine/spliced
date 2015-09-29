@@ -1,5 +1,6 @@
 var fs = require('fs');
 var gm = require('gm').subClass({imageMagick: true});
+var db = require('../DB/DB.js');
 
 module.exports = {
   errorLogger: function (error, req, res, next) {
@@ -54,10 +55,60 @@ module.exports = {
       // if the image exists, then read the file and send it back to the user inside callback function. 
       console.log('file exists');
       fs.readFile('Server/assets/images/final.png', function(err, data) {
-        if (err) console.log(err) 
-        callback(data)
+        if (err) console.log(err);
+        callback(data);
       });
-    })
+    });
+  },
+
+  //gameid, playerid, url to image
+  updatePlayer: function() {
+
+  },
+
+  createNewGame: function(player, userKey, userName, res) {
+    var newGame = {num_players: 4, count: 1};
+    newGame[userKey] = player.id;
+    //need to change to update in the db.
+    db.started = true;
+    // console.log("game is started: " + db.started);
+    //update the counted to true - prevents counting a player twice.
+    db.player.findOneAndUpdate({user_name: userName}, {counted: true}, {upsert: true, 'new': true}, function (err, player) {
+      console.log("Player counted updated.");
+    });
+    //puts the new game into the database
+    db.game.update({game_name: "game"}, newGame, {upsert: true, 'new': true}, function(err, game){
+      return res.sendStatus(201);
+    });
+  },
+
+  //update a game if it already exists
+  updateGame: function(player, userKey, userName, res) {
+    //create a new game object
+    var gameObj = {};
+    gameObj[userKey] = player.id;
+    //if the player has never submitted a drawing...
+    if(!player.counted){
+      //increment number of submitted drawings
+      gameObj.$inc = {'count':1};
+      //update the player to know they have been counted
+      db.player.findOneAndUpdate({user_name: userName}, {counted: true, 'new': true}, {upsert: true}, function (err, player) {
+        console.log("Player counted updated.");
+      });
+      //update the game with the new player information
+      db.game.findOneAndUpdate({game_name: "game"}, gameObj, {upsert: true, 'new': true}, function(err, game){
+        //if all players have submitted drawings
+        if (game.count === game.num_players) {
+          console.log("Let's invoke the image stitcher function now");
+          // invoke create unified image function 
+          this.makeImages(function() {
+            if (err) throw err;
+            console.log("Done drawing the image, check the image folder!");
+          });
+        }
+      });
+    }
+    return res.sendStatus(201); 
   }
 
 };
