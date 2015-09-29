@@ -8,7 +8,8 @@ angular.module('spliced.services', [])
     .then(function(finalImageURL) { 
       callback(finalImageURL.data)
     }, function(err) {
-      errorCallback();
+      console.log("There was an error retrieving the final image URL.");
+      errorCallback(err);
     })
   }
 

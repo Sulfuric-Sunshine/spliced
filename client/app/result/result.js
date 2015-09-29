@@ -4,16 +4,11 @@ angular.module('spliced.result', [])
 
   $scope.data = {};
 
-  $scope.data.finalImageURL = $scope.data.finalImageURL || '';
-
-  $scope.data.finalImageExists = false; 
+  $scope.data.pleaseWaitMessage = 'Looks like your collaborators are still drawing. Check back soon for your final drawing!';
 
   $scope.getFinalImage = function() {
     Draw.getFinalImage(function(finalImageURL) {
       $scope.data.finalImageURL = finalImageURL;
-      $scope.data.finalImageExists = true; 
-    }, function() {
-      $scope.data.finalImageExists = false;
     });
   }
 
