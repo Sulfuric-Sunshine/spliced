@@ -3,18 +3,31 @@ angular.module('spliced', [
   'spliced.draw',
   'spliced.result',
   'ngRoute',
-  'pw.canvas-painter'
+  'pw.canvas-painter',
+  'spliced.home',
+  'ngCookies'
 ])
 .config(function ($routeProvider, $httpProvider) {
   $routeProvider
-    .when('/game', {
+    .when('/', {
+      templateUrl: 'app/home/home.html',
+      controller: 'HomeController'
+    })
+    .when('/final', {
       templateUrl: 'app/result/result.html',
       controller: 'ResultController'
     })
-    .when('/game/:playerId', {
+   
+    .when('/game/:code', {
+      templateUrl: 'app/draw/ready.html',
+      controller: 'DrawController'
+    }) 
+
+    .when('/game/:code/draw', {
       templateUrl: 'app/draw/draw.html',
       controller: 'DrawController'
     })
+
     .otherwise({
       templateUrl: 'app/result/result.html',
       controller: 'ResultController'
