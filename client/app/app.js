@@ -12,14 +12,21 @@ angular.module('spliced', [
       templateUrl: 'app/home/home.html',
       controller: 'HomeController'
     })
-    .when('/game', {
+    .when('/final', {
       templateUrl: 'app/result/result.html',
       controller: 'ResultController'
     })
-    .when('/game/:playerId', {
+   
+    .when('/game/:code', {
+      templateUrl: 'app/draw/ready.html',
+      controller: 'DrawController'
+    }) 
+
+    .when('/game/:code/draw', {
       templateUrl: 'app/draw/draw.html',
       controller: 'DrawController'
     })
+
     .otherwise({
       templateUrl: 'app/result/result.html',
       controller: 'ResultController'

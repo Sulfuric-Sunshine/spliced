@@ -1,6 +1,6 @@
 angular.module('spliced.draw', [])
 
-.controller('DrawController', function ($scope, $route, Draw) {
+.controller('DrawController', function ($scope, $route, Draw, $location) {
   // drawing info will go here.
   $scope.data = {};
 
@@ -23,5 +23,13 @@ angular.module('spliced.draw', [])
   $scope.undo = function() { 
     $scope.data.drawing.version--;
   } 
+
+ $scope.gameCode = $route.current.params.code;
+  // console.log($route.current.params.code);
+
+  $scope.registerPlayer = function(){
+
+      Draw.registerPlayer($scope.gameCode);
+  }
 
 });

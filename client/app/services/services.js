@@ -35,6 +35,24 @@ angular.module('spliced.services', [])
     });
   };
 
+  services.registerPlayer = function(gameCode, callback){
+    //POST request:
+    $http.get('/game/' + gameCode )
+    .then(function(){
+
+    }), function(err){
+      
+      console.log("There was an error registering the player", err)
+      
+    }
+    //make a new player object in the database
+
+    //make an update to the game object so it knows another
+
+    //count should be incremented on the game object
+
+    //row in the table 
+  }
   return services;
 });
 

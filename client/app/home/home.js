@@ -1,6 +1,6 @@
 angular.module('spliced.home', [])
 
-.controller('HomeController', function ($scope, Draw) {
+.controller('HomeController', function ($scope, Draw, $location) {
 
   $scope.data = {};
 
@@ -9,6 +9,7 @@ angular.module('spliced.home', [])
   $scope.createGame = function() {
     Draw.createGame(function(code) {
       console.log(code);
+      $location.path('/game/' + code);
     });
   }
 

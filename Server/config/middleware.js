@@ -5,6 +5,7 @@ var router = require('../routes.js');
 var path = require('path');
 var fs = require('fs');
 var gm = require('gm');
+var session = require('express-session')
 
 
 module.exports = function (app, express) {
@@ -16,6 +17,12 @@ module.exports = function (app, express) {
   app.use(express.static(__dirname + '/../../client'));  //rename to whatever the client location is.
 
   // *********Set up our routes to manage calls to our REST API.
+
+app.use(session({
+  secret: 'shhh, it\'s a secret',
+  resave: false,
+  saveUninitialized: true
+  }));
   
   // This gets the final image on the /game page. 
   // **NB** Later on we will replace '/game' with the actual game id. 
@@ -34,7 +41,25 @@ module.exports = function (app, express) {
     helpers.createNewGame(res);
   });
 
-  
+  app.get('/game/:gameCode', function(req, res){
+    if(!req.session)
+    //check for a cookie
+    //call isLoggedIn
+      // if not logged in:
+        //see if there is room in the game (check count)
+          //if count not four
+            // create a new player
+              // update game object with new player + count
+              // create the session.  
+    req.session.regenerate(function() {
+      req.session.user = newUser;
+      res.redirect('/');
+    });
+    //check if player exists
+    //make a session for player
+    //enter player into database
+  });
+
   app.post('/game/:username', function(req, res){
     //save the image
     //from the username - make a player - give it the image link and etc.
@@ -99,11 +124,6 @@ module.exports = function (app, express) {
 
   });
 
-  app.get('/game/', function(req, res){
-    //if count is 4
-    //send back all four images.
-    //else....dunno.  Figure it out later.
-  });
 
 
   app.use(helpers.errorLogger);
