@@ -4,20 +4,22 @@ angular.module('spliced.services', [])
   var services = {};
 
   services.getFinalImage = function(callback, errorCallback) {
-    $http.get('/game')
+    // TODO: might change this later
+    $http.get('/finalresult')
     .then(function(finalImageURL) { 
       callback(finalImageURL.data)
     }, function(err) {
       console.log("There was an error retrieving the final image URL.");
       errorCallback(err);
-    })
-  }
+    });
+  };
 
-  services.save = function(image, playerId) {
+  services.save = function(image, gameCode, cookieData) {
     console.log("Inside services, the image is", image);
-    console.log("Inside services, the playerId is", playerId);
+    console.log("Inside services, the gameCode is", gameCode);
+    console.log("Inside services, the cookieData is", cookieData);
     // write post request here! :)
-    $http.post('/game/' + playerId, { image: image } )
+    $http.post('/game/' + gameCode, { image: image, cookieData: cookieData } )
     .then(function(response) {
       console.log("The response is", response);
     }, function(err) {
@@ -25,6 +27,33 @@ angular.module('spliced.services', [])
     });
   };
 
+  services.createGame = function(callback) {
+    $http.get('/game')
+    .then(function (gameCode) {
+      callback(gameCode.data)
+    }, function(err) {
+      console.log('There was an error getting the game code.');
+    });
+  };
+
+  services.registerPlayer = function(gameCode, callback){
+    //POST request:
+    $http.get('/game/' + gameCode )
+    .then(function(){
+
+    }), function(err){
+      
+      console.log("There was an error registering the player", err)
+      
+    }
+    //make a new player object in the database
+
+    //make an update to the game object so it knows another
+
+    //count should be incremented on the game object
+
+    //row in the table 
+  }
   return services;
 });
 

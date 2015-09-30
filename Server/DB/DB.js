@@ -8,13 +8,14 @@ var started = false;
 var gameSchema = new Schema({
   num_players : Number,
   count: Number,
-  game_name: String,
-  player_1_id : String,
-  player_2_id : String,
-  player_3_id : String,
-  player_4_id : String,
+  game_code: String,
+  00 : String,
+  01 : String,
+  02 : String,
+  03 : String,
   game_started: Boolean,
-  game_finished: Boolean
+  game_finished: Boolean,
+  drawing_finished: Boolean
 });
 
 var playerSchema = new Schema({
