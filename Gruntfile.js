@@ -67,30 +67,24 @@ module.exports = function(grunt) {
       client: {
         src: '<%= concat.client.dest %>',
         //.tmp is a best practice for intermediary files/garbage.
-        dest: 'public/dist/shortymcshortly.min.js'
+        dest: 'TO BE FILLED IN'
       },
       dependencies: {
         src: '<%= concat.dependencies.dest %>',
         //.tmp is a best practice for intermediary files/garbage.
-        dest: 'public/dist/dependencies.min.js'
+        dest: 'TO BE FILLED IN'
       },
     },*/
 
     /*jshint: {
       files: [
         // Add filespec list here
-        '*.js',
-        'app/*.js',
-        'app/*.js',
-        'lib/*.js',
-        'public/*.js',
-        'public/*.js'
+
       ],
       options: {
         force: 'true',
         jshintrc: '.jshintrc',
         ignores: [
-          'public/lib/*'
         ]
       }
     },*/
@@ -99,7 +93,7 @@ module.exports = function(grunt) {
         // Add filespec list here
       target: {
         files: [{
-          src: 'public/style.css',
+          src: 'client/stlyes/style.css',
           dest: 'public/dist/style.min.css'
         }]
       }
@@ -108,8 +102,6 @@ module.exports = function(grunt) {
     /*watch: {
       scripts: {
         files: [
-          'public/client/*.js',
-          'public/lib/*.js',
         ],
         tasks: [
           'concat',
@@ -119,11 +111,6 @@ module.exports = function(grunt) {
       css: {
         files: 'public/*.css',
         tasks: ['cssmin']
-      }
-    },
-
-    shell: {
-      prodServer: {
       }
     },
  */ });
