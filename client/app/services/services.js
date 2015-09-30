@@ -14,11 +14,12 @@ angular.module('spliced.services', [])
     });
   };
 
-  services.save = function(image, playerId) {
+  services.save = function(image, gameCode, cookieData) {
     console.log("Inside services, the image is", image);
-    console.log("Inside services, the playerId is", playerId);
+    console.log("Inside services, the gameCode is", gameCode);
+    console.log("Inside services, the cookieData is", cookieData);
     // write post request here! :)
-    $http.post('/game/' + playerId, { image: image } )
+    $http.post('/game/' + gameCode, { image: image, cookieData: cookieData } )
     .then(function(response) {
       console.log("The response is", response);
     }, function(err) {

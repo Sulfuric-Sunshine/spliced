@@ -1,6 +1,6 @@
 angular.module('spliced.draw', [])
 
-.controller('DrawController', function ($scope, $route, Draw, $location) {
+.controller('DrawController', function ($scope, $route, Draw, $location, $cookies) {
   // drawing info will go here.
   $scope.data = {};
 
@@ -15,7 +15,7 @@ angular.module('spliced.draw', [])
 
   $scope.save = function() { 
     var image = document.getElementById("pwCanvasMain").toDataURL();  
-    Draw.save(image, $scope.data.playerId);
+    Draw.save(image, $scope.gameCode, $cookies.getAll());
     $scope.data.submitted = true;
     // send the image to the server.
   };
@@ -31,5 +31,8 @@ angular.module('spliced.draw', [])
 
       Draw.registerPlayer($scope.gameCode);
   }
+
+  var player = $cookies.get("player");
+  console.log(player);
 
 });

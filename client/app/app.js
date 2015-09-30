@@ -4,7 +4,8 @@ angular.module('spliced', [
   'spliced.result',
   'ngRoute',
   'pw.canvas-painter',
-  'spliced.home'
+  'spliced.home',
+  'ngCookies'
 ])
 .config(function ($routeProvider, $httpProvider) {
   $routeProvider
