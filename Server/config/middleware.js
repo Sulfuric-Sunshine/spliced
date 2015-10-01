@@ -27,21 +27,25 @@ module.exports = function (app, express) {
     helpers.createNewGame(res);
   });
 
-  app.get('/game/:gameCode/' + 'status', function(req, res){
+  app.get('/game/:gameCode/status', function(req, res){
     console.log("getting game status");
     var gameCode = req.params.gameCode; 
     // if the game exists in the database
     db.game.findOne({game_code: gameCode}, function(err, game) {
       if (err) {
         console.log(err);
-        res.sendStatus(404);
+        // res.sendStatus(404);
       }
       if (!game) {
+        console.log('no game')
         res.sendStatus(404);
       } else {
+        console.log('checking for final image')
         helpers.checkFinalImage(gameCode, function(finalImageURL) {
           res.send(finalImageURL);
-        }, function() {
+        }, function(err) {
+          console.log('we think theres an error', err);
+          res.sendStatus(201);
         })
       }
     })
