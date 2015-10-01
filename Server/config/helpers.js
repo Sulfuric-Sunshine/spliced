@@ -40,12 +40,12 @@ module.exports = {
     console.log("makeImages was invoked... making images");
     console.log("---------");
 
-    var readStream = fs.createReadStream("Server/assets/drawings/" + gameCode + "00.png");
+    var readStream = fs.createReadStream("Server/assets/drawings/" + gameCode + "0.png");
     // using http://aheckmann.github.io/gm/docs.html#append
 
     gm(readStream)
     //This is not scalable for N players.  You'll need to append these in some kind of loop.
-    .append("Server/assets/drawings/" + gameCode + "01.png", "Server/assets/drawings/" + gameCode + "02.png", "Server/assets/drawings/" + gameCode + "03.png")
+    .append("Server/assets/drawings/" + gameCode + "1.png", "Server/assets/drawings/" + gameCode + "2.png", "Server/assets/drawings/" + gameCode + "3.png")
     .write('client/uploads/' + gameCode + '.png', function (err) {
       console.log("Streaming the image now");
       if (err) {
@@ -77,15 +77,17 @@ module.exports = {
         // if the image exists, then send the path to the image onward.
         var fixedFinalImageURL = finalImageURL.slice(6);
         console.log("The final image URL was successfully retrieved from the server. It's", fixedFinalImageURL);
-        callback(fixedFinalImageURL);
+        callback({imageURL: fixedFinalImageURL});
       }
     });
   },
 
   //Create a new player for a specific game.
   createPlayer: function(req, res, game, code) {
-    var userName = "0".concat(game.player_count);
-    // console.log("When we create the player, the code is", code);
+
+    var userName = game.player_count;
+    console.log("When we create the player, the code is", code);
+
     // add this player to the database.
     db.player.findOneAndUpdate({user_name: userName}, {user_name: userName, counted: false, game_code: code}, {upsert: true, 'new': true}, function (err, player) {
       // console.log("New player", userName, "Has been added to game:", code);
@@ -99,13 +101,15 @@ module.exports = {
       // console.log("We're creating the player. the Player is:", player);
       var gameObj = {};
       gameObj.$inc = {'player_count':1};
-      gameObj.userName = player.id;
+      gameObj[userName] = player.id;
+      console.log("Console logging gameObj", gameObj);
       db.game.findOneAndUpdate({game_code: code}, gameObj, function(err, game){
         if(err){
           console.log(err);
         } else {
           // console.log("GET GAME: This is the game data", game);
           // send game back to client.
+          res.cookie('templateId', game.template,{ maxAge: 900000, httpOnly: false});
           res.send({game: game, player: player});
         }
 
@@ -132,7 +136,8 @@ module.exports = {
 
   createNewGame: function(res){
     var code = this.createUniqueGameCode();
-    var game = new db.game({game_code: code, num_players: 4, player_count: 0, submission_count: 0, game_started: true}).save();
+    var randomTemplateNumber = Math.floor(Math.random() * 4);
+    var game = new db.game({game_code: code, num_players: 4, player_count: 0, submission_count: 0, game_started: true, drawing_finished: false, 0: null, 1: null, 2: null, 3: null, template: randomTemplateNumber}).save();
     console.log("the unique code is:" + code);
     res.send(code);
   },
@@ -157,6 +162,7 @@ module.exports = {
       db.game.findOneAndUpdate({game_code: gameCode}, gameObj, {upsert: true, 'new': true}, function (err, game){
         //if all players have submitted drawings
         console.log('Game count VS number of players', game.submission_count, game.num_players);
+        console.log("The gameObj", gameObj);
         if (game.submission_count === game.num_players) {
           console.log("Let's invoke the image stitcher function now");
           // invoke create unified image function 

@@ -13,7 +13,7 @@ angular.module('spliced.ready', [])
 
   // this asks the server for info about the game. 
   $scope.getGameStatus = function() {
-    
+    console.log("getting the game status!");
     Draw.getGameStatus($scope.data.gameCode, function(response) {
       console.log("The game status response is...", response);
       // if the game has the property imageURL
@@ -26,7 +26,11 @@ angular.module('spliced.ready', [])
     });
   }
 
+  $scope.registerPlayer = function() {
+     Draw.registerPlayer($scope.data.gameCode);
+  }
   // this invokes getGameStatus when the page is loaded.
+
   $scope.getGameStatus();
 
 });
