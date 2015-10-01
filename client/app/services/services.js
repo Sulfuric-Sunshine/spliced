@@ -49,6 +49,7 @@ angular.module('spliced.services', [])
 
   services.getGameStatus = function(gameCode, callback) {
     console.log("Getting game data...");
+
     $http.get('/game/' + gameCode )
     .then(function(response){
       console.log("The game data is...", response);

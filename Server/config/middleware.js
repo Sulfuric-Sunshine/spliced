@@ -65,11 +65,8 @@ module.exports = function (app, express) {
         });
       // if the user already has a session
       } else {
-
+        console.log("Hello, the user already has a session");
       }
-      //check if player exists
-      //make a session for player
-      //enter player into database
     });
   });
 
