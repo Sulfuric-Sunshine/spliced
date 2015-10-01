@@ -15,7 +15,6 @@ var gameSchema = new Schema({
   02 : String,
   03 : String,
   game_started: Boolean,
-  game_finished: Boolean,
   drawing_finished: Boolean
 });
 

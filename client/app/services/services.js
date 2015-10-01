@@ -38,22 +38,26 @@ angular.module('spliced.services', [])
 
   services.registerPlayer = function(gameCode, callback){
     //POST request:
+    console.log("Am I making a request?");
     $http.get('/game/' + gameCode )
-    .then(function(){
-
+    .then(function(response){
+      console.log(response);
     }), function(err){
-      
       console.log("There was an error registering the player", err)
-      
     }
-    //make a new player object in the database
+  };
 
-    //make an update to the game object so it knows another
+  services.getGameStatus = function(gameCode, callback) {
+    console.log("Getting game data...");
+    $http.get('/game/' + gameCode )
+    .then(function(response){
+      console.log("The game data is...", response);
+      callback(response);
+    }), function(err){
+      console.log("There was an error registering the player", err)
+    }  
+  };
 
-    //count should be incremented on the game object
-
-    //row in the table 
-  }
   return services;
 });
 

@@ -1,12 +1,13 @@
 <div id='draw'> 
   <div class="drawing-area" ng-hide="data.submitted">
     <div pw-canvas options="{undo: true, width: 400, height: 200, color: '#000', lineWidth: 4}" ng-model="data.drawing" class="canvas-container" version="data.drawing.version"></div>
-    <button ng-click="save()">Save Drawing</button>
-    <button ng-click="undo()">Undo</button>
+    <a class="button" ng-click="save()">Save Drawing</a>
+    <a ng-click="undo()" class="button minor">Undo</a>
   </div>
 
   <div class="drawing-success" ng-show="data.submitted">
     {{ data.success }}
+    <p><a href="/#/game/{{ data.gameCode }}" class="button">OK</a></p>
   </div>
 
 </div>
