@@ -35,16 +35,6 @@ module.exports = {
     return response;
   },
 
-  checkGameState: function(gameCode, callback, errCallback) {
-    db.game.findOne({ game_code: gameCode, drawing_finished: true }, function(err, game) {
-      if (!game) {
-        console.log("No action needed");
-      } else {
-        callback(game);
-      }
-    })
-  },
-
   makeImages: function(gameCode, numPlayers, callback) {
     console.log("---------");
     console.log("makeImages was invoked... making images");
