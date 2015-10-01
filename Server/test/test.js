@@ -7,11 +7,15 @@ var should = chai.should();
 var expect = require('chai').expect;
 var helpers = require("../config/helpers.js");
 var middleware = require("../config/middleware.js");
+var db = require('../DB/DB.js');
 // for when we eventually want to test against mock data
 var fs = require('fs');
 var path = require('path');
 // var supertest = require("supertest")(middleware);
 // TODO: tests for create new game and updateGame
+
+var globalCode;
+var globalPlayer;
 describe('helper functions', function() {
 
   describe('errorLogger', function() {
@@ -165,82 +169,99 @@ describe('helper functions', function() {
 
       // expect(helpers.makeImages()).to.be.ok;
     })
-    // it('should create a new Game', function(){
 
-    //   expect(helpers.makeImages()).to.be.ok;
-    // })
-    // it('should send back a response with the code', function(){
+     it('should create a new Game', function(done){
+      app.get('/game', function(req, res){
+        helpers.createNewGame(res);
+      });
 
-    //   expect(helpers.makeImages()).to.be.ok;
-    // })
+      request(app)
+      .get('/game')
+      .expect(200)
+      
+       .end(function(err, res) {
+        if (err) return done(err);
+          var code = res.text;
+          globalCode = res.text;
+          var game = db.game.findOne({game_code: code}, function(err, game) {
+            if (err) throw err;
+            expect(game.game_code).to.equal(code);
+          });
+       });
+      done();
+    })
     
   })
-  
-});
 
-describe('middleware API', function() {
-  //TODO: write tests for update game + resolveFinishedGame here.
+  describe('createPlayer function', function(){
 
+    it('should create a username if a game exists', function (done){
 
-  it('responds with data that should be binary but is actually text/html?', function(done) {
-    // var imagePath = path.join(__dirname, '/../assets/drawings/', userName + '.png');
-    request(app)
-    //this is now '/finalresult'
-      .get('/show')
+      var code;
 
-    .expect('Content-Type', 'text/html; charset=utf-8')
-    // .parse(binaryParser)
-    .end(function(err, res) {
-      if (err) return done(err);
+      app.get('/game/:gameCode', function (req, res){
 
-      // binary response data is in res.body as a buffer
-      // assert.ok(Buffer.isBuffer(res.body));
-      // console.log("res=", res.body);
-      done();
+        code = req.params.gameCode;
+        db.game.findOne({game_code: code}, function(err, game) {
+          if(err) throw err;
+          helpers.createPlayer(req, res, game, game.game_code);
+
+        });
+      });
+
+      //create a new game
+      request(app)
+      .get('/game/' + globalCode)
+      //we have access to the new player now because of the player property
+      .end(function (err, res) {
+        if (err) return done(err);
+        // console.log('res.body.player is ', res.body.player);
+        globalPlayer = res.body.player;
+
+        expect(res.body.player.game_code).to.equal(code);
+        // var player = res.text;
+          // var player = db.game.findOne({game_code: code}, function(err, game) {
+          //   if (err) throw err;
+          //   expect(game.game_code).to.equal(code);
+          // });
+        done();
+      });
     });
   });
- it('assigns a user key properly', function(done) {
-    request(app)
-      .post('/game/:username')
-      .send({
-        image: "image/png",
-        username: "player1",
-        userKey: ""
-      })
-    // .expect(201)
-    .expect(function(res) {
-      res.body.userKey === "player_1_id"
+
+describe('updateGame function', function(){
+  it('should update the counted property only if helpers.updateGame() is called', function (done){
+    //
+    var res = {};
+    // we are doing this here because in helpers line 167, there is expected to be a sendStatus function.
+    res.sendStatus = function(status) {console.log('sendingstatus')};
+
+
+    db.player.findOne({user_name: globalPlayer.user_name}, function(err, player){
+      if(err) throw err
+        console.log(player.counted);
+    expect(player.counted).to.equal(false);  
     })
 
-    // .expect()
+    helpers.updateGame(globalPlayer, globalCode, res);
 
 
-    .end(function(err, res) {
-      if (err) return done(err);
+    db.player.findOne({user_name: globalPlayer.user_name}, function(err, player){
+      if(err) throw err
+        console.log(player.counted);
+    expect(player.counted).to.equal(true);  
+    })
+    done();
+  })
 
-      done();
-    });
-
-  });
- //TODO: test the createPlayer function in the middleware tests with supertest
-
-
-  // it('shows the whole game', function(done) {
-  //   request(app)
-  //     .get('/game/')
-
-  //   .expect(201)
-  //   // .expect
-  //   // .expect(res.body.should.have.property("userKey"))
-  //   //expect(getFinalImageUrl()).to.contain('png')
-  //   // .expect()
-
-
-  //   .end(function(err, res) {
-  //     if (err) return done(err);
-
-  //     done();
-  //   })
-
-  // })
+  it('should update the game.... ', function(done){
+    db.player.findOne({user_name: globalPlayer.user_name}, function(err, player){
+      if(err) throw err
+        console.log(player.counted);
+    expect(player.counted).to.equal(true);  
+    done();
+    })
+  })
 })
+
+});

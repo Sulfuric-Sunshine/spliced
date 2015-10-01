@@ -85,18 +85,18 @@ module.exports = {
   //Create a new player for a specific game.
   createPlayer: function(req, res, game, code) {
     var userName = "0".concat(game.player_count);
-    console.log("When we create the player, the code is", code);
+    // console.log("When we create the player, the code is", code);
     // add this player to the database.
     db.player.findOneAndUpdate({user_name: userName}, {user_name: userName, counted: false, game_code: code}, {upsert: true, 'new': true}, function (err, player) {
-      console.log("New player", userName, "Has been added to game:", code);
-      console.log("We are making cookies!");
+      // console.log("New player", userName, "Has been added to game:", code);
+      // console.log("We are making cookies!");
       res.cookie(code + '_playerName', player.user_name, { maxAge: 900000, httpOnly: false});
       res.cookie(code + '_playerID', player.id,{ maxAge: 900000, httpOnly: false});
       res.cookie(code, true, { maxAge: 900000, httpOnly: false});
-      console.log("The cookies are:", res.cookie);
+      // console.log("The cookies are:", res.cookie);
       // once the player has been added, we'll update the game table with the new player's info
       // this update also includes count++
-      console.log("We're creating the player. the Player is:", player);
+      // console.log("We're creating the player. the Player is:", player);
       var gameObj = {};
       gameObj.$inc = {'player_count':1};
       gameObj.userName = player.id;
@@ -104,9 +104,9 @@ module.exports = {
         if(err){
           console.log(err);
         } else {
-          console.log("GET GAME: This is the game data", game);
+          // console.log("GET GAME: This is the game data", game);
           // send game back to client.
-          res.send({game: game});
+          res.send({game: game, player: player});
         }
 
       });
@@ -114,9 +114,9 @@ module.exports = {
   },
 
   //gameid, playerid, url to image
-  updatePlayer: function() {
+  // updatePlayer: function() {
 
-  },
+  // },
 
   createUniqueGameCode: function(){
 
@@ -133,7 +133,7 @@ module.exports = {
   createNewGame: function(res){
     var code = this.createUniqueGameCode();
     var game = new db.game({game_code: code, num_players: 4, player_count: 0, submission_count: 0, game_started: true, game_finished: false}).save();
-    console.log("the unique code is:" + code);
+    // console.log("the unique code is:" + code);
     res.send(code);
   },
 
@@ -141,17 +141,20 @@ module.exports = {
   updateGame: function(player, gameCode, res) {
     //create a new game object
     var gameObj = {};
+    console.log('player.id is ', player._id);
+    // console.log('player.id is ', player.id);
     gameObj[player.user_name] = player.id;
+    // console.log('gameObj[player.user_name] is ', gameObj[player.user_name]);
     //if the player has never submitted a drawing...
     if(!player.counted){
       //increment number of submitted drawings
       gameObj.$inc = {'submission_count':1};
       //update the player to know they have been counted
-      db.player.findOneAndUpdate({user_name: player.user_name}, {counted: true, 'new': true}, {upsert: true}, function (err, player) {
+      db.player.findOneAndUpdate({user_name: player.user_name}, {counted: true}, {upsert: true, 'new': true}, function (err, player) {
         console.log("Player count updated.");
       });
       //update the game with the new player information
-      db.game.findOneAndUpdate({game_code: gameCode}, gameObj, {upsert: true, 'new': true}, function(err, game){
+      db.game.findOneAndUpdate({game_code: gameCode}, gameObj, {upsert: true, 'new': true}, function (err, game){
         //if all players have submitted drawings
         console.log('Game count VS number of players', game.submission_count, game.num_players);
         if (game.submission_count === game.num_players) {
