@@ -11,10 +11,17 @@ angular.module('spliced.draw', [])
   $scope.data.success = "Success! Your image has been submitted!"
 
   $scope.data.gameCode = $route.current.params.code;
-
   var templateId = $cookies.get('templateId');
-  var userId = $cookies.get($scope.data.gameCode + '_playerName');
-  $scope.data.templateSrc = '/assets/bg/' + templateId + '-' + userId + '.png';
+  $scope.data.userId = $cookies.get($scope.data.gameCode + '_playerName');
+  $scope.data.templateSrc = '/assets/bg/' + templateId + '-' + $scope.data.userId + '.png';
+
+  $scope.data.bodyPart = {
+    0: "head",
+    1: "chest/upper torso",
+    2: "lower body/legs",
+    3: "feet"
+  }
+
 
   $scope.save = function() { 
     var image = document.getElementById("pwCanvasMain").toDataURL();  
