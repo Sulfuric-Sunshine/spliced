@@ -1,6 +1,6 @@
 angular.module('spliced.draw', [])
 
-.controller('DrawController', function ($scope, $route, Draw, $location, $cookies) {
+.controller('DrawController', function ($scope, $route, Draw, $q, $location, $cookies) {
   // drawing info will go here.
   $scope.data = {};
 
@@ -12,6 +12,9 @@ angular.module('spliced.draw', [])
 
   $scope.data.gameCode = $route.current.params.code;
 
+  var templateId = $cookies.get('templateId');
+  var userId = $cookies.get($scope.data.gameCode + '_playerName');
+  $scope.data.templateSrc = '/assets/bg/' + templateId + '-' + userId + '.png';
 
   $scope.save = function() { 
     var image = document.getElementById("pwCanvasMain").toDataURL();  

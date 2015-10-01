@@ -27,6 +27,26 @@ module.exports = function (app, express) {
     helpers.createNewGame(res);
   });
 
+  app.get('/game/:gameCode/' + 'status', function(req, res){
+    console.log("getting game status");
+    var gameCode = req.params.gameCode; 
+    // if the game exists in the database
+    db.game.findOne({game_code: gameCode}, function(err, game) {
+      if (err) {
+        console.log(err);
+        res.sendStatus(404);
+      }
+      if (!game) {
+        res.sendStatus(404);
+      } else {
+        helpers.checkFinalImage(gameCode, function(finalImageURL) {
+          res.send(finalImageURL);
+        }, function() {
+        })
+      }
+    })
+  });
+
   app.get('/game/:gameCode', function(req, res){
 
     var code = req.params.gameCode;
@@ -74,7 +94,6 @@ module.exports = function (app, express) {
   app.post('/game/:gameCode', function(req, res){
     var image = req.body.image;
     var cookieData = req.body.cookieData;
-    console.log("inside our post handler, the cookie data is", cookieData);
     var gameCode = req.params.gameCode;
     console.log("The game's player ID: ", cookieData[gameCode+"_playerName"]);
     var username = cookieData[gameCode+"_playerName"];

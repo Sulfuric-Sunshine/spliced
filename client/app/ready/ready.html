@@ -4,7 +4,7 @@
     <div class="gamecode">{{ data.gameCode }} </div>
     <p>Share the link with your friends!</p>
     <p><a href="#/game/{{ data.gameURL }}">{{ data.gameURL }}</a></p>
-    <a class="button" href="#/game/{{ data.gameCode }}/draw" ng-click="registerPlayer()">Enter Game</a>
+    <a class="button" ng-click="registerPlayer()">Enter Game</a>
   </div>
   <div class="game-finished" ng-show="data.isComplete">
     <img src="{{ data.imageURL }}" />
