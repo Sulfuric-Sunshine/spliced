@@ -1,17 +1,37 @@
 body {
   margin: 0;
   margin-top: 10px;
-  font-family: arial, sans-serif;
+  font-family: 'helvetica neue', helvetica, sans-serif;
 }
 
 a {
   color: #333;
   font-size: 14px;
+}
+a.button {
   text-decoration: none;
+  background-color: #419BF9;
+  padding: 10px;
+  color: #fff;
+  cursor: pointer;
+  margin-top: 10px;
+  float: left;
+  margin-right: 10px;
 }
 
+a:hover {
+  background: rgb(151, 202, 255);
+}
+
+a.minor {
+    background-color: #eee;
+    color: #333;
+}
+
+a.minor:hover {
+  background-color: #fff;
+}
 h1 {
-  font-style: italic;
   margin-bottom: 10px;
 }
 
@@ -46,11 +66,6 @@ h1 {
 
 .navigation li a.selected {
   background-color: #ccc;
-}
-
-#container {
-  clear: both;
-  margin-top: 10px;
 }
 
 .link {
@@ -156,10 +171,25 @@ input.ng-invalid.ng-dirty {
 
 .container {
   width: 100%;
+  padding: 10px;
 }
 
 @media (max-width: 400px) {
   img {
     width: 100%;
   }
+}
+.enter-code-form {
+  margin-top: 20px;
+  clear: both;
+  float: left;
+}
+.enter-code-form input {
+  font-size: 24px;
+  float: left;
+  clear: both;
+}
+.enter-code-form a {
+  float: left;
+  clear: both;
 }

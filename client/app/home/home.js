@@ -13,4 +13,9 @@ angular.module('spliced.home', [])
     });
   }
 
+  $scope.enterCode = function(gameCode) {
+    var newUrl = '/game/' + gameCode;
+    $location.path(newUrl);
+  }
+
 })

@@ -1,0 +1,12 @@
+<div id="ready">
+  <div class="game-start" ng-hide="data.isComplete">
+    <p>Your Code is:</p>
+    <div class="gamecode">{{ data.gameCode }} </div>
+    <p>Share the link with your friends!</p>
+    <p>{{ data.gameURL }}</p>
+    <a class="button" ng-click="registerPlayer()">Enter Game</a>
+  </div>
+  <div class="game-finished" ng-show="data.isComplete">
+    <img src="{{ data.imageURL }}" />
+  </div>
+</div>

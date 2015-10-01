@@ -10,12 +10,12 @@ var gameSchema = new Schema({
   player_count: Number,
   submission_count: Number,
   game_code: String,
-  00 : String,
-  01 : String,
-  02 : String,
-  03 : String,
+  0 : String,
+  1 : String,
+  2 : String,
+  3 : String,
+  template: Number,
   game_started: Boolean,
-  game_finished: Boolean,
   drawing_finished: Boolean
 });
 
