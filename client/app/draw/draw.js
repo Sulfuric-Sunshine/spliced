@@ -24,12 +24,4 @@ angular.module('spliced.draw', [])
     $scope.data.drawing.version--;
   } 
 
-
-  $scope.registerPlayer = function(){
-    Draw.registerPlayer($scope.gameCode);
-  }
-
-  var player = $cookies.get("player");
-  console.log(player);
-
 });

@@ -13,6 +13,9 @@ angular.module('spliced', [
       templateUrl: 'app/home/home.html',
       controller: 'HomeController'
     })
+    .when('/game', {
+      redirectTo: '/'
+    })
     .when('/game/:code', {
       templateUrl: 'app/ready/ready.html',
       controller: 'ReadyController'
@@ -22,8 +25,7 @@ angular.module('spliced', [
       controller: 'DrawController'
     })
     .otherwise({
-      templateUrl: 'app/result/result.html',
-      controller: 'ResultController'
+      redirectTo: '/'
     });
     // We add our $httpInterceptor into the array
     // of interceptors. Think of it like middleware for your ajax calls

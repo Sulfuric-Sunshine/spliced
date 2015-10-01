@@ -1,6 +1,6 @@
 angular.module('spliced.services', [])
 
-.factory('Draw', function($http) {
+.factory('Draw', function($http, $location) {
   var services = {};
 
   services.getFinalImage = function(callback, errorCallback) {
@@ -53,9 +53,10 @@ angular.module('spliced.services', [])
     .then(function(response){
       console.log("The game data is...", response);
       callback(response);
-    }), function(err){
-      console.log("There was an error registering the player", err)
-    }  
+    }, function(err){
+      console.log("The game doesn't exist", err);
+      $location.path('/#')
+    })
   };
 
   return services;
