@@ -179,3 +179,17 @@ input.ng-invalid.ng-dirty {
     width: 100%;
   }
 }
+.enter-code-form {
+  margin-top: 20px;
+  clear: both;
+  float: left;
+}
+.enter-code-form input {
+  font-size: 24px;
+  float: left;
+  clear: both;
+}
+.enter-code-form a {
+  float: left;
+  clear: both;
+}
