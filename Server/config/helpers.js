@@ -35,6 +35,16 @@ module.exports = {
     return response;
   },
 
+  checkGameState: function(gameCode, callback, errCallback) {
+    db.game.findOne({ game_code: gameCode, drawing_finished: true }, function(err, game) {
+      if (!game) {
+        console.log("No action needed");
+      } else {
+        callback(game);
+      }
+    })
+  },
+
   makeImages: function(gameCode, numPlayers, callback) {
     console.log("---------");
     console.log("makeImages was invoked... making images");
@@ -132,8 +142,8 @@ module.exports = {
 
   createNewGame: function(res){
     var code = this.createUniqueGameCode();
-    var game = new db.game({game_code: code, num_players: 4, player_count: 0, submission_count: 0, game_started: true, game_finished: false}).save();
-    // console.log("the unique code is:" + code);
+    var game = new db.game({game_code: code, num_players: 4, player_count: 0, submission_count: 0, game_started: true}).save();
+    console.log("the unique code is:" + code);
     res.send(code);
   },
 
@@ -166,29 +176,23 @@ module.exports = {
           });
         }
       });
-    }
+    } 
     return res.sendStatus(201); 
+
   },
 
   resolveFinishedGame: function (game) {
-    if (game.game_finished) {
-      // we will check if the drawing is completed
-      if (game.drawing_finished) {
-        // if the drawing is completed
-        this.checkFinalImage(game.game_code, function() {
-          var imageURL = '/client/uploads' + game.game_code + '.png';
-          // we need to send it back.
-          res.send({imageURL: imageURL});
-        });
-      } else {
-        res.sendStatus(500);
-        // if the drawing got messed up or never got completed
-          // we will try to draw it again.
-      }
+    if (game.drawing_finished) {
+      // if the drawing is completed
+      this.checkFinalImage(game.game_code, function() {
+        var imageURL = '/client/uploads' + game.game_code + '.png';
+        // we need to send it back.
+        res.send({imageURL: imageURL});
+      });
     } else {
-      // if it's not completed
-      res.send({gameInProgress: true});
-        // tell the user that the game is still in progress 
+      res.sendStatus(500);
+      // if the drawing got messed up or never got completed
+        // we will try to draw it again.
     }
   }
 }

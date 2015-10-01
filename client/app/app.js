@@ -1,7 +1,7 @@
 angular.module('spliced', [
   'spliced.services',
   'spliced.draw',
-  'spliced.result',
+  'spliced.ready',
   'ngRoute',
   'pw.canvas-painter',
   'spliced.home',
@@ -13,21 +13,14 @@ angular.module('spliced', [
       templateUrl: 'app/home/home.html',
       controller: 'HomeController'
     })
-    .when('/final', {
-      templateUrl: 'app/result/result.html',
-      controller: 'ResultController'
-    })
-   
     .when('/game/:code', {
-      templateUrl: 'app/draw/ready.html',
-      controller: 'DrawController'
+      templateUrl: 'app/ready/ready.html',
+      controller: 'ReadyController'
     }) 
-
     .when('/game/:code/draw', {
       templateUrl: 'app/draw/draw.html',
       controller: 'DrawController'
     })
-
     .otherwise({
       templateUrl: 'app/result/result.html',
       controller: 'ResultController'

@@ -32,9 +32,11 @@ module.exports = function (app, express) {
     var code = req.params.gameCode;
 
     //TODO: fill out this empty function!
-    helpers.checkFinalImage(code, function(image) {res.send(image);}, function() {
+    helpers.checkFinalImage(code, function(image) {res.send({imageURL: image});}, function() {
       // invoke check final image before anything else ... and if the image doesn't exist, then do all the stuff in the error callback 
       // if the user does not already have a session
+
+      // we need to check the cookie to see if the player 
       if(!helpers.hasSession(req)){
 
         // grab the game code from the req parameters
