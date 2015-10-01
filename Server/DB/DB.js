@@ -1,5 +1,7 @@
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/my_database');
+
+var mongodb_uri = process.env.MONGOLAB_URI || 'mongodb://localhost/my_database';
+mongoose.connect(mongodb_uri);
 
 var Schema = mongoose.Schema;
 
