@@ -18,9 +18,10 @@ angular.module('spliced.ready', [])
       if (response.data.hasOwnProperty("imageURL")) {
         $scope.data.isComplete = true;
         $scope.data.imageURL = response.data.imageURL;
-      }
+      } 
     });
   }
+
   $scope.getGameStatus();
 
 });
