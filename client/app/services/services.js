@@ -3,6 +3,7 @@ angular.module('spliced.services', [])
 .factory('Draw', function($http, $location) {
   var services = {};
 
+  // This makes a POST request and sends the image, as well as cookie data, back to the server. 
   services.save = function(image, gameCode, cookieData) {
     console.log("Inside services, the image is", image);
     console.log("Inside services, the gameCode is", gameCode);
@@ -16,6 +17,7 @@ angular.module('spliced.services', [])
     });
   };
 
+  // This makes a GET request to the game, which returns a game code to us
   services.createGame = function(callback) {
     $http.get('/game')
     .then(function (gameCode) {
@@ -25,8 +27,9 @@ angular.module('spliced.services', [])
     });
   };
 
+  // This makes a POST request to the server and takes the user to the /draw page if
+  // the player was successfully registered. 
   services.registerPlayer = function(gameCode, callback){
-    //POST request:
     console.log("Am I making a request?");
     $http.get('/game/' + gameCode )
     .then(function(response){
@@ -39,6 +42,8 @@ angular.module('spliced.services', [])
     }
   };
 
+  // This gets the game status. If the game doesn't exist, then it'll redirect the user back to
+  // home (#).
   services.getGameStatus = function(gameCode, callback) {
     console.log("Getting game data...");
 
@@ -54,6 +59,3 @@ angular.module('spliced.services', [])
 
   return services;
 });
-
-// Store all four images in an object 
-// On the result page, you'll create a canvas that has four images on top of it

@@ -24,11 +24,11 @@ angular.module('spliced.draw', [])
 
   $scope.data.gameCode = $route.current.params.code;
 
-  /* On the server side, we sent a randomly generated template ID to the user in a cookie. This template
-  ID will give them one of several sets of templates with pre-drawn dots. It'll also assign which part
-  of the body the user should be drawing (i.e. head, body1, body2, feet), based on their userID, which
-  was sent back in a cookie. The userID is 0, 1, 2, or 3, depending on who hit the server first. It's a
-  first-come first-served dealio. */ 
+  // On the server side, we sent a randomly generated template ID to the user in a cookie. This template
+  // ID will give them one of several sets of templates with pre-drawn dots. It'll also assign which part
+  // of the body the user should be drawing (i.e. head, body1, body2, feet), based on their userID, which
+  // was sent back in a cookie. The userID is 0, 1, 2, or 3, depending on who hit the server first. It's a
+  // first-come first-served dealio. 
 
   var templateId = $cookies.get('templateId');
   $scope.data.userId = $cookies.get($scope.data.gameCode + '_playerName');
@@ -45,10 +45,10 @@ angular.module('spliced.draw', [])
     3: "feet"
   }
 
-  /* This function grabs the canvas HTML element and turns it into a base64 encoded image -- that's what
-  `toDataURL() does`. Then it asks the Draw service to take the drawing, as well as the game code and cookie data
-  (just for kicks). Finally, on clicking save, the $scope.data.submitted property is set to true, which triggers
-  the success message. */
+  // This function grabs the canvas HTML element and turns it into a base64 encoded image -- that's what
+  // `toDataURL() does`. Then it asks the Draw service to take the drawing, as well as the game code and cookie data
+  // (just for kicks). Finally, on clicking save, the $scope.data.submitted property is set to true, which triggers
+  // the success message.
 
   $scope.save = function() { 
     var image = document.getElementById("pwCanvasMain").toDataURL();  
