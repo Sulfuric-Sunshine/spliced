@@ -83,7 +83,7 @@ module.exports = {
   },
 
   //Create a new player for a specific game.
-  createPlayer: function(req, res, game, code) {
+  createPlayer: function(req, res, game, code, callback) {
 
     var userName = game.player_count;
     console.log("When we create the player, the code is", code);
@@ -111,6 +111,9 @@ module.exports = {
           // send game back to client.
           res.cookie('templateId', game.template,{ maxAge: 900000, httpOnly: false});
           res.send({game: game, player: player});
+          if(callback){
+            callback(player);
+          }
         }
 
       });
@@ -143,12 +146,12 @@ module.exports = {
   },
 
   //update a game if it already exists
-  updateGame: function(player, gameCode, res) {
+  updateGame: function(player, gameCode, res, callback) {
     //create a new game object
     var gameObj = {};
     console.log('player.id is ', player._id);
     // console.log('player.id is ', player.id);
-    gameObj[player.user_name] = player.id;
+    gameObj[player.user_name] = player._id;
     // console.log('gameObj[player.user_name] is ', gameObj[player.user_name]);
     //if the player has never submitted a drawing...
     if(!player.counted){
@@ -165,15 +168,18 @@ module.exports = {
         console.log("The gameObj", gameObj);
         if (game.submission_count === game.num_players) {
           console.log("Let's invoke the image stitcher function now");
-          // invoke create unified image function 
+          // invoke create unified image function
           module.exports.makeImages(gameCode, game.num_players, function() {
             if (err) throw err;
             console.log("Done drawing the image, check the image folder!");
+            if(callback){
+              callback();
+            }
           });
         }
       });
-    } 
-    return res.sendStatus(201); 
+    }
+    return res.sendStatus(201);
 
   },
 
