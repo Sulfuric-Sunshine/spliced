@@ -193,3 +193,12 @@ input.ng-invalid.ng-dirty {
   float: left;
   clear: both;
 }
+
+h1 {
+  background: url(../assets/images/spliced-logo.png) 0 0 no-repeat;
+  width: 167px;
+  height: 76px;
+  background-size: 167px 76px;
+  text-indent: -9999px;
+  margin-top: 0;
+}
