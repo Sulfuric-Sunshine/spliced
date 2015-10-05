@@ -126,9 +126,13 @@ module.exports = {
 
   getPlayerSession: function(req, res, code) {
     // check if the user has submitted their drawing.
+    console.log("-----------------------");
+    console.log("getting the player session...");
+    console.log("-----------------------");
     var username = req.cookies[code + '_playerID'];
     console.log('username is', username);
     db.player.findOne({game_code: code, _id: username}, function(err, player) {
+      console.log("inside db.player.findOne in getPlayerSession");
       if (err) console.log("There was an error finding the user by their ID", err)
       // if the user has submitted their drawing
       if (player) {
@@ -141,16 +145,15 @@ module.exports = {
           res.send(responseObj);
         } else if (!player.submitted_drawing && player.started_drawing) {
           console.log("The player has started drawing, but hasn't submitted yet.");
+          var codeAndDrawingStatus = code + '_' + 'submitted_drawing';
+          var responseObj = {};
+          responseObj[codeAndDrawingStatus] = false;
+          res.send(responseObj);
         }
         console.log(player);
       }
     });
   },
-
-  //gameid, playerid, url to image
-  // updatePlayer: function() {
-
-  // },
 
   createUniqueGameCode: function(){
 
@@ -206,6 +209,7 @@ module.exports = {
         }
       });
     }
+    console.log("I'm sending the status now!");
     return res.sendStatus(201);
 
   },

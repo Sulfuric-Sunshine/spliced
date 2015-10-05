@@ -32,8 +32,15 @@ angular.module('spliced.services', [])
   services.registerPlayer = function(gameCode, callback){
     $http.get('/game/' + gameCode )
     .then(function(response){
-      var newUrl = '/game/' + gameCode + '/draw';
-      $location.path(newUrl);
+      console.log("This is the response.data from registerPlayer()", response.data);
+      var submittedDrawing = response.data[gameCode + '_submitted_drawing'];
+      if (submittedDrawing === true) {
+        var newUrl = '/game/' + gameCode + '/wait';
+        $location.path(newUrl);
+      } else {
+        var newUrl = '/game/' + gameCode + '/draw';
+        $location.path(newUrl);
+      } 
       console.log(newUrl);
       console.log(response);
     }), function(err){

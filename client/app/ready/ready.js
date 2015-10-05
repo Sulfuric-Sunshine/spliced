@@ -36,6 +36,10 @@ angular.module('spliced.ready', [])
         console.log("You submitted a drawing!!!!");
         $scope.data.submittedDrawing = true;
       }
+      if (response.data[submittedDrawing] === false) {
+        console.log("You dolt, you never finished your drawing!");
+        $location.path('/draw');
+      }
     });
   }
 
@@ -43,9 +47,7 @@ angular.module('spliced.ready', [])
   // a new player object. They will also be added to the game object. 
   $scope.registerPlayer = function() {
      Draw.registerPlayer($scope.data.gameCode);
-  }
+  };
 
-  // this invokes getGameStatus when the page is loaded.
-  $scope.getGameStatus();
 
 });

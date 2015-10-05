@@ -98,8 +98,10 @@ module.exports = function (app, express) {
       // if the user already has a session
       } else {
         console.log("Hello, the user already has a session");
+        helpers.getPlayerSession(req, res, code); 
         // if they have seen the game board but haven't submitted their drawing
           // make them finish their drawing, probably by redirecting them to /draw
+        // if the user HAS submitted their drawing, send them to the wait screen
       }
     });
   });
