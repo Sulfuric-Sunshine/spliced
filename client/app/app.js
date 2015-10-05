@@ -19,16 +19,16 @@ angular.module('spliced', [
     .when('/game/:code', {
       templateUrl: 'app/ready/ready.html',
       controller: 'ReadyController'
-    }) 
+    })
     .when('/game/:code/draw', {
       templateUrl: 'app/draw/draw.html',
       controller: 'DrawController'
     })
-    .when('/game/:code/wait', {
-      templateUrl: 'app/ready/wait.html',
+    .when('/game/:code/status', {
+      templateUrl: 'app/ready/status.html',
       controller: 'ReadyController'
     })
     .otherwise({
       redirectTo: '/'
     });
-})
+});
