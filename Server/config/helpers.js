@@ -172,7 +172,9 @@ module.exports = {
           module.exports.makeImages(gameCode, game.num_players, function() {
             if (err) throw err;
             console.log("Done drawing the image, check the image folder!");
-            callback();
+            if(callback){
+              callback();
+            }
           });
         }
       });
