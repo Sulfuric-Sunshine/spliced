@@ -20,7 +20,7 @@ var globalCode;
 var globalPlayer;
 
 describe('helper functions', function() {
-  
+  // console.log("Test");
   app.use(session({
     secret: 'shhh, it\'s a secret',
     resave: false,
