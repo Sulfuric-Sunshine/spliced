@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 
 //var mongodb_uri = process.env.MONGOLAB_URI || 'mongodb://localhost/my_database';
-var mongooseURI = 'mongodb://Sulfuric:Sunshine@ds042908.mongolab.com:42908/spliced_db';
+var mongooseURI = 'mongodb://Sulfuric:Sunshine@ds042908.mongolab.com:42908/spliced_db'; 
 mongoose.connect(mongooseURI);
 
 var Schema = mongoose.Schema;
