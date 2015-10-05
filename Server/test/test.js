@@ -7,6 +7,7 @@ var should = chai.should();
 var expect = require('chai').expect;
 var helpers = require("../config/helpers.js");
 var middleware = require("../config/middleware.js");
+var session = require('express-session');
 var path = require("path");
 var db = require('../DB/DB.js');
 // for when we eventually want to test against mock data
@@ -19,6 +20,12 @@ var globalCode;
 var globalPlayer;
 
 describe('helper functions', function() {
+  
+  app.use(session({
+    secret: 'shhh, it\'s a secret',
+    resave: false,
+    saveUninitialized: true
+  }));
 
   describe('errorLogger', function() {
 
@@ -261,8 +268,17 @@ describe('helper functions', function() {
   });
 
   describe("The game flow.", function(){
+
+    app.use(session({
+      secret: 'shhh, it\'s a secret',
+      resave: false,
+      saveUninitialized: true
+    }));
+
     var res = {};
-    var player2, player3, player4, req;
+    var player2, player3, player4;
+    var req = {};
+    req.session = {};
     var code;
     // we are doing this here because in helpers line 167, there is expected to be a sendStatus function.
     res.sendStatus = function(status) {
@@ -275,6 +291,7 @@ describe('helper functions', function() {
     game.player_count = 1;
 
     it('should add a second player', function (done){
+
       helpers.createPlayer(req, res, game, globalCode, function(player){
         player2 = player;
         db.game.findOne({game_code: globalCode}, function(err, game) {
