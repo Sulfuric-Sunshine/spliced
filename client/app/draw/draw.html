@@ -8,7 +8,7 @@
 
   <div class="drawing-success" ng-show="data.submitted">
     {{ data.success }}
-    <p><a href="/#/game/{{ data.gameCode }}" class="button">OK</a></p>
+    <p><a ng-click="getGameStatus()" class="button">OK</a></p>
   </div>
 
 </div>

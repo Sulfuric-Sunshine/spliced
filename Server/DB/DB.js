@@ -31,6 +31,8 @@ var playerSchema = new Schema({
   phone: String,
   email: String,
   counted: Boolean,
+  submitted_drawing: Boolean,
+  started_drawing: Boolean,
   user_name: String
 });
 

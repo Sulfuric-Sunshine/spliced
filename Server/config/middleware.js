@@ -4,12 +4,14 @@ var db = require('../DB/DB.js');
 var path = require('path');
 var fs = require('fs');
 var gm = require('gm');
+var cookieParser = require('cookie-parser');
 var session = require('express-session');
 
 
 module.exports = function (app, express) {
   // Express 4 allows us to use multiple routers with their own configurations
 
+  app.use(cookieParser());
   //app.use(morgan('dev'));
   app.use(bodyParser.urlencoded({extended: true}));
   app.use(bodyParser.json());
@@ -21,7 +23,9 @@ module.exports = function (app, express) {
     secret: 'shhh, it\'s a secret',
     resave: false,
     saveUninitialized: true
-    }));
+  }));
+
+
 
   app.get('/game', function(req, res){
     helpers.createNewGame(res);
@@ -44,8 +48,14 @@ module.exports = function (app, express) {
         helpers.checkFinalImage(gameCode, function(finalImageURL) {
           res.send(finalImageURL);
         }, function(err) {
-          console.log('we think theres an error', err);
-          res.sendStatus(201);
+          console.log('There is no final image yet');
+          if (helpers.hasSession(req)) {
+            console.log("The player has a session");
+            helpers.getPlayerSession(req, res, gameCode); 
+          } else {
+            console.log("This is a new player, they have no session yet");
+          }
+          // res.sendStatus(201);
         })
       }
     })
@@ -57,14 +67,12 @@ module.exports = function (app, express) {
 
     //TODO: fill out this empty function!
     helpers.checkFinalImage(code, function(image) {res.send({imageURL: image});}, function() {
-      // invoke check final image before anything else ... and if the image doesn't exist, then do all the stuff in the error callback 
-      // if the user does not already have a session
+      // invoke check final image before anything else ... and if the image doesn't exist, then do all the stuff in gameInProgressCallback 
 
-      // we need to check the cookie to see if the player 
+      // if the user does not already have a session
       if(!helpers.hasSession(req)){
 
-        // grab the game code from the req parameters
-
+        // create a session for the player.
         // query the database for the game using the game code
         db.game.findOne({game_code: code}, function(err, game){
 
@@ -90,6 +98,10 @@ module.exports = function (app, express) {
       // if the user already has a session
       } else {
         console.log("Hello, the user already has a session");
+        helpers.getPlayerSession(req, res, code); 
+        // if they have seen the game board but haven't submitted their drawing
+          // make them finish their drawing, probably by redirecting them to /draw
+        // if the user HAS submitted their drawing, send them to the wait screen
       }
     });
   });
@@ -116,7 +128,7 @@ module.exports = function (app, express) {
       } else {
         //db.player.update or insert
         //this finds the user document in the db and either creates it or updates it (if it already exists).
-        db.player.findOneAndUpdate({game_code: gameCode, user_name: username}, {image:imagePath}, {upsert: true, 'new': true}, function (err, player) {
+        db.player.findOneAndUpdate({game_code: gameCode, user_name: username}, {image:imagePath, submitted_drawing: true}, {upsert: true, 'new': true}, function (err, player) {
           console.log("Player updated with Image URL, calling helpers.updateGame");
           //This function updates the game with the new player data.
           helpers.updateGame(player, gameCode, res);
