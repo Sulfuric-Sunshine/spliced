@@ -3,7 +3,6 @@ angular.module('spliced.services', [])
 .factory('Draw', function($http, $location) {
   var services = {};
 
-
   services.save = function(image, gameCode, cookieData) {
     console.log("Inside services, the image is", image);
     console.log("Inside services, the gameCode is", gameCode);
