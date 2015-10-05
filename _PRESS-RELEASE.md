@@ -32,7 +32,7 @@ Once the project moves into development, the press release can be used as a touc
   > The product seamlessly moves 4 players into a game, provides a drawing canvas, and does the stitching of the four drawings together.
 
 ## Quote from You ##
-  > "The fastest way to generate laughs between four people addicted to their phones that I've ever seen.""
+  > "The fastest way to generate laughs between four people addicted to their phones that I've ever seen."
 
 ## How to Get Started ##
   > Just hit spliced.herokuapp.com and follow the instructions!
