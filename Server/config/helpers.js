@@ -64,20 +64,20 @@ module.exports = {
     });
   },
 
-  checkFinalImage: function(code, callback, errCallback) {
+  checkFinalImage: function(code, finalImageReadyCallback, gameInProgressCallback) {
 
     // **NB** this finalImageURL is hard coded right now, but later it should be path_to_images/gameID.png
     var finalImageURL = 'client/uploads/' + code + '.png';
     // first, check to see if the final image exists.
     fs.stat(finalImageURL, function(err, res) {
       if (err) {
-        errCallback(err);
+        gameInProgressCallback(err);
         console.log("The image", finalImageURL, "doesn't exist!");
       } else {
         // if the image exists, then send the path to the image onward.
         var fixedFinalImageURL = finalImageURL.slice(6);
         console.log("The final image URL was successfully retrieved from the server. It's", fixedFinalImageURL);
-        callback({imageURL: fixedFinalImageURL});
+        finalImageReadyCallback({imageURL: fixedFinalImageURL});
       }
     });
   },
