@@ -57,6 +57,25 @@ angular.module('spliced.draw', [])
     // send the image to the server.
   };
 
+  $scope.getGameStatus = function() {
+    console.log("Getting the game status for", $scope.data.gameCode);
+    Draw.getGameStatus($scope.data.gameCode, function(response) {
+      console.log("The game status response is...", response);
+      // if the game has the property imageURL
+      if (response.data.hasOwnProperty("imageURL")) {
+        // direct user to /result page
+
+      };
+      var submittedDrawing = $scope.data.gameCode + '_submitted_drawing';
+      if (response.data[submittedDrawing]) {
+        console.log("You submitted a drawing!!!!");
+        console.log("Forwarding you to /#/game/:code/wait")
+        var newLocation = '/game/' + $scope.data.gameCode + '/wait';
+        $location.path(newLocation);
+      }
+    });
+  }
+
 
 
 });

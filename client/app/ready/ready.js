@@ -14,10 +14,12 @@ angular.module('spliced.ready', [])
 
   $scope.data.gameURL = window.location.href;
 
+  $scope.data.submittedDrawing = $scope.data.submittedDrawing || false;
+
   // When the user hits the url /#/game/:code, we'll query the server for the status of the game. 
   // if the server responds with an imageURL, then we'll show the final drawn image to the user! 
   $scope.getGameStatus = function() {
-    console.log("getting the game status for", $scope.data.gameCode);
+    console.log("Getting the game status for", $scope.data.gameCode);
     Draw.getGameStatus($scope.data.gameCode, function(response) {
       console.log("The game status response is...", response);
       // if the game has the property imageURL
@@ -28,7 +30,12 @@ angular.module('spliced.ready', [])
 
         // and we set the $scope's image URL to the imageURL from the response.
         $scope.data.imageURL = response.data.imageURL;
-      } 
+      };
+      var submittedDrawing = $scope.data.gameCode + '_submitted_drawing';
+      if (response.data[submittedDrawing]) {
+        console.log("You submitted a drawing!!!!");
+        $scope.data.submittedDrawing = true;
+      }
     });
   }
 

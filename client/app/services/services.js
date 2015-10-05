@@ -30,7 +30,6 @@ angular.module('spliced.services', [])
   // This makes a POST request to the server and takes the user to the /draw page if
   // the player was successfully registered. 
   services.registerPlayer = function(gameCode, callback){
-    console.log("Am I making a request?");
     $http.get('/game/' + gameCode )
     .then(function(response){
       var newUrl = '/game/' + gameCode + '/draw';
@@ -50,6 +49,12 @@ angular.module('spliced.services', [])
     $http.get('/game/' + gameCode + '/status')
     .then(function(response){
       console.log("The game data is...", response);
+      var submittedDrawing = gameCode + '_submitted_drawing';
+      if (response.data[submittedDrawing]) {
+        console.log("Forwarding you to /#/game/:code/wait")
+        var newLocation = '/game/' + gameCode + '/wait';
+        $location.path(newLocation);
+      }
       callback(response);
     }, function(err){
       console.log("The game doesn't exist", err);

@@ -24,6 +24,10 @@ angular.module('spliced', [
       templateUrl: 'app/draw/draw.html',
       controller: 'DrawController'
     })
+    .when('/game/:code/wait', {
+      templateUrl: 'app/ready/wait.html',
+      controller: 'ReadyController'
+    })
     .otherwise({
       redirectTo: '/'
     });
