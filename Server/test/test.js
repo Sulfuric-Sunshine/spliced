@@ -7,6 +7,7 @@ var should = chai.should();
 var expect = require('chai').expect;
 var helpers = require("../config/helpers.js");
 var middleware = require("../config/middleware.js");
+var path = require("path");
 var db = require('../DB/DB.js');
 // for when we eventually want to test against mock data
 var fs = require('fs');
@@ -16,18 +17,15 @@ var path = require('path');
 
 var globalCode;
 var globalPlayer;
+
 describe('helper functions', function() {
 
   describe('errorLogger', function() {
 
     it('should be a function', function() {
-
       helpers.errorLogger.should.be.a('function');
-
       helpers.errorLogger.should.not.be.a('object');
-
       //expect(helpers.errorLogger.bind(null, error, req, res, next)).to.throw(error.stack);
-
     });
 
     it('should throw an error', function(done) {
@@ -35,18 +33,15 @@ describe('helper functions', function() {
       assert.throws(helpers.errorHandler, Error);
       done();
     });
-
   });
+
   describe('errorHandler', function() {
 
     it('should be a function', function() {
-
       helpers.errorHandler.should.be.a('function');
-
       helpers.errorHandler.should.not.be.a('object');
-
-
     });
+
     it('should throw an error', function(done) {
       request(app);
       assert.throws(helpers.errorHandler, Error);
@@ -55,16 +50,17 @@ describe('helper functions', function() {
   });
 
   describe('hasSession', function(){
+
     it('should be a function', function(){
       helpers.hasSession.should.be.a('function');
       helpers.hasSession.should.not.be.a('object');
-    })
+    });
     it('should return a Boolean value', function(done){
       var req = '';
       assert.isBoolean(helpers.hasSession(req));
       done();
-    })
-  })
+    });
+  });
 
   describe('decodeBase64Image', function() {
 
@@ -76,48 +72,42 @@ describe('helper functions', function() {
 
 
   describe('makeimages function', function(){
-    
-  it('should be a function', function(){
-    helpers.makeImages.should.be.a('function');
-  })
-//TODO: write tests for database. this function is going to change alot.  
 
-  }) 
+    it('should be a function', function(){
+      helpers.makeImages.should.be.a('function');
+    });
+    //TODO: write tests for database. this function is going to change alot.
+  });
+
   describe('checkFinalImage function', function(){
-    
-  it('should be a function', function(){
-    helpers.checkFinalImage.should.be.a('function');
-  })
 
-  it("should throw an error", function(done){
-    request(app);
-    assert.throws(function(){
+    it('should be a function', function(){
+      helpers.checkFinalImage.should.be.a('function');
+    });
 
-      helpers.checkFinalImage("bsCode", callback, error);
+    it("should throw an error", function(done){
+      request(app);
+      assert.throws(function(){
+        helpers.checkFinalImage("bsCode", callback, error);
       }, Error);
-    
       done();
-  })
-
-  })  
+    });
+  });
 
   describe('createPlayer function', function(){
-    
-  it('should be a function', function(){
-    helpers.createPlayer.should.be.a('function');
-  })
 
-  it("should throw an error", function(done){
-    request(app);
-    assert.throws(function(){
+    it('should be a function', function(){
+      helpers.createPlayer.should.be.a('function');
+    });
 
-      helpers.checkFinalImage("bsCode", callback, error);
+    it("should throw an error", function(done){
+      request(app);
+      assert.throws(function(){
+        helpers.checkFinalImage("bsCode", callback, error);
       }, Error);
-    
       done();
-  })
-
-  })
+    });
+  });
 
   describe('createUniqueGameCode Function', function(){
     var code1 = helpers.createUniqueGameCode();
@@ -125,50 +115,38 @@ describe('helper functions', function() {
     var code3 = helpers.createUniqueGameCode();
 
     it('should return a 4-digit code', function(){
-      expect(code1).to.have.length(4)
-    })
+      expect(code1).to.have.length(4);
+    });
 
      it('should return unique codes', function(){
-      expect(code1).to.not.equal(code3)
-      expect(code2).to.not.equal(code3)
-    })
-  })  
+      expect(code1).to.not.equal(code3);
+      expect(code2).to.not.equal(code3);
+    });
+  });
 
   // describe('makeImages function', function(){
-  //   it('should create a readStream', function(){
 
+  //   it('should create a readStream', function(){
   //     expect(helpers.makeImages()).to.be.ok;
   //   })
-    
   // })
-    describe('createNewGame function', function(){
+
+  describe('createNewGame function', function(){
 
     it('should create a code', function(done){
-
       app.get('/game', function(req, res){
         helpers.createNewGame(res);
       });
-
       request(app)
-      .get('/game')
-      .expect(200)
-      // .expect(function(res) {
-      //   res.text.length === 3;
-      // })
-      // .end(function(err, res){
-      //   console.log('I am inside of create a game test');
-      //   console.log('The res.body.code is ', res.body.code);
-      //   expect(res.body.code).to.have.length(4)
-
-    // .expect(res.body.should.have.property("code"))
-       .end(function(err, res) {
-        if (err) return done(err);
-          expect(res.text).to.have.length(4);
-        done();
-       });
-
+        .get('/game')
+        .expect(200)
+        .end(function(err, res) {
+          if (err) return done(err);
+            expect(res.text).to.have.length(4);
+          done();
+        });
       // expect(helpers.makeImages()).to.be.ok;
-    })
+    });
 
      it('should create a new Game', function(done){
       app.get('/game', function(req, res){
@@ -178,8 +156,7 @@ describe('helper functions', function() {
       request(app)
       .get('/game')
       .expect(200)
-      
-       .end(function(err, res) {
+      .end(function(err, res) {
         if (err) return done(err);
           var code = res.text;
           globalCode = res.text;
@@ -187,11 +164,10 @@ describe('helper functions', function() {
             if (err) throw err;
             expect(game.game_code).to.equal(code);
           });
-       });
+      });
       done();
-    })
-    
-  })
+    });
+  });
 
   describe('createPlayer function', function(){
 
@@ -200,12 +176,12 @@ describe('helper functions', function() {
       var code;
 
       app.get('/game/:gameCode', function (req, res){
-
         code = req.params.gameCode;
         db.game.findOne({game_code: code}, function(err, game) {
-          if(err) throw err;
+          if(err) {
+            throw err;
+          }
           helpers.createPlayer(req, res, game, game.game_code);
-
         });
       });
 
@@ -214,10 +190,11 @@ describe('helper functions', function() {
       .get('/game/' + globalCode)
       //we have access to the new player now because of the player property
       .end(function (err, res) {
-        if (err) return done(err);
-        // console.log('res.body.player is ', res.body.player);
+        if (err) {
+          return done(err);
+        }
+        console.log('res.body.player is ', res.body.player);
         globalPlayer = res.body.player;
-
         expect(res.body.player.game_code).to.equal(code);
         // var player = res.text;
           // var player = db.game.findOne({game_code: code}, function(err, game) {
@@ -229,39 +206,142 @@ describe('helper functions', function() {
     });
   });
 
-describe('updateGame function', function(){
-  it('should update the counted property only if helpers.updateGame() is called', function (done){
-    //
+  describe('updateGame function', function(){
+
+    it('should update the counted property only if helpers.updateGame() is called', function (done){
+      var res = {};
+      // we are doing this here because in helpers line 167, there is expected to be a sendStatus function.
+      res.sendStatus = function(status) {
+        console.log('sendingstatus');
+      };
+
+
+      db.player.findOne({user_name: globalPlayer.user_name}, function(err, player){
+        if(err) {
+          throw err;
+        }
+        console.log(player.counted);
+        expect(player.counted).to.equal(false);
+      });
+
+      helpers.updateGame(globalPlayer, globalCode, res);
+
+      db.player.findOne({user_name: globalPlayer.user_name}, function(err, player){
+        if(err) {
+          throw err;
+        }
+        console.log(player.counted);
+        expect(player.counted).to.equal(true);
+      });
+      done();
+
+    });
+
+    it('should update the player when the game is updated.... ', function(done){
+      db.player.findOne({user_name: globalPlayer.user_name}, function(err, player){
+        if(err) {
+          throw err;
+        }
+        console.log(player.counted);
+        expect(player.counted).to.equal(true);
+        done();
+      });
+    });
+
+    it('should update the game.... ', function(done){
+      db.game.findOne({game_code: globalCode}, function(err, game){
+        if(err) {
+          throw err;
+        }
+        //console.log(game);
+        expect(game.submission_count).to.equal(1);
+        done();
+      });
+    });
+  });
+
+  describe("The game flow.", function(){
     var res = {};
+    var player2, player3, player4, req;
+    var code;
     // we are doing this here because in helpers line 167, there is expected to be a sendStatus function.
-    res.sendStatus = function(status) {console.log('sendingstatus')};
+    res.sendStatus = function(status) {
+      console.log('sendingstatus');
+    };
+    res.send = function(){};
+    res.cookie = function(){};
+
+    var game = {};
+    game.player_count = 1;
+
+    it('should add a second player', function (done){
+      helpers.createPlayer(req, res, game, globalCode, function(player){
+        player2 = player;
+        db.game.findOne({game_code: globalCode}, function(err, game) {
+          if(err) {
+            console.log("Couldn't find the game!");
+            throw err;
+          }
+          //console.log("The count: ", game.player_count);
+          expect(game.player_count).to.equal(2);
+          done();
+        });
+      });
+    });
 
 
-    db.player.findOne({user_name: globalPlayer.user_name}, function(err, player){
-      if(err) throw err
-        console.log(player.counted);
-    expect(player.counted).to.equal(false);  
-    })
+    it('should add a third player', function(done){
+      game.player_count++;
+      helpers.createPlayer(req, res, game, globalCode, function(player){
+        player3 = player;
+        db.game.findOne({game_code: globalCode}, function(err, game) {
+          if(err) {
+            console.log("Couldn't find the game!");
+            throw err;
+          }
+          //console.log("The count: ", game.player_count);
+          expect(game.player_count).to.equal(3);
+          done();
+        });
+      });
+    });
 
-    helpers.updateGame(globalPlayer, globalCode, res);
+    it('should add a fourth player', function(done){
+      game.player_count++;
+      helpers.createPlayer(req, res, game, globalCode, function(player){
+        player4 = player;
+        db.game.findOne({game_code: globalCode}, function(err, game) {
+          if(err) {
+            console.log("Couldn't find the game!");
+            throw err;
+          }
+          //console.log("The count: ", game.player_count);
+          expect(game.player_count).to.equal(4);
+          done();
+        });
+      });
+    });
 
+    it('should have a submission count of 0', function (done){
+      db.game.findOne({game_code: globalCode}, function(err, game){
+        expect(game.submission_count).to.equal(1);
+        done();
+      });
+    });
 
-    db.player.findOne({user_name: globalPlayer.user_name}, function(err, player){
-      if(err) throw err
-        console.log(player.counted);
-    expect(player.counted).to.equal(true);  
-    })
-    done();
-  })
-
-  it('should update the game.... ', function(done){
-    db.player.findOne({user_name: globalPlayer.user_name}, function(err, player){
-      if(err) throw err
-        console.log(player.counted);
-    expect(player.counted).to.equal(true);  
-    done();
-    })
-  })
-})
-
+    it('should assign images to respective players', function (done){
+      fs.writeFileSync(path.join(__dirname, "../assets/drawings/" + globalCode + "0.png"), fs.readFileSync(path.join(__dirname, "../assets/testDrawings/test0.png")));
+      fs.writeFileSync(path.join(__dirname, "../assets/drawings/" + globalCode + "1.png"), fs.readFileSync(path.join(__dirname, "../assets/testDrawings/test1.png")));
+      fs.writeFileSync(path.join(__dirname, "../assets/drawings/" + globalCode + "2.png"), fs.readFileSync(path.join(__dirname, "../assets/testDrawings/test2.png")));
+      fs.writeFileSync(path.join(__dirname, "../assets/drawings/" + globalCode + "3.png"), fs.readFileSync(path.join(__dirname, "../assets/testDrawings/test3.png")));
+      helpers.updateGame(player2, globalCode, res);
+      helpers.updateGame(player3, globalCode, res);
+      helpers.updateGame(player4, globalCode, res, function(){
+        var file1 = fs.readFileSync(path.join(__dirname, "../assets/testDrawings/testResult.png"));
+        var file2 = fs.readFileSync(path.join(__dirname, "../../client/uploads/" + globalCode + ".png"));
+        expect(file1).to.equal(file2);
+      });
+      done();
+    });
+  });
 });
