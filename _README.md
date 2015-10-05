@@ -4,9 +4,9 @@
 
 ## Team
 
-  - __Product Owner__: teamMember
-  - __Scrum Master__: teamMember
-  - __Development Team Members__: teamMember, teamMember
+  - __Product Owner__: Jessica Chong
+  - __Scrum Master__: Brett Sanders
+  - __Development Team Members__: Adam Hedgpeth, Fareez Ahmed
 
 ## Table of Contents
 
@@ -20,31 +20,31 @@
 
 ## Usage
 
-> Some usage instructions
+> Simply go to the homepage - instructions are in the game.
 
 ## Requirements
 
 - Node 0.10.x
-- Redis 2.6.x
-- Postgresql 9.1.x
-- etc
-- etc
+- Depenencies are chained together with NPM.
 
 ## Development
+
+Database connection is through mongoose and can be found in Server/DB.js
+
+Scope out Server/config for the meat of the server code.  There is no concept of username and password in this game - game codes are automatically generated and the first four people to hit the URL get to play, in order.
+
 
 ### Installing Dependencies
 
 From within the root directory:
 
 ```sh
-sudo npm install -g bower
 npm install
-bower install
 ```
 
 ### Roadmap
 
-View the project roadmap [here](LINK_TO_PROJECT_ISSUES)
+View the project roadmap [here](https://github.com/Sulfuric-Sunshine/spliced/issues)
 
 
 ## Contributing
