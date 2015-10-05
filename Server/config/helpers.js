@@ -19,8 +19,16 @@ module.exports = {
     res.send(500, {error: error.message});
   },
 
-  hasSession: function (req) {
-    return req.session ? !!req.session.user : false;
+  hasSession: function (req, code) {
+    console.log('Inside hasSession, req.cookie is: ', req.cookies);
+    //return req.session ? !!req.session.user : false;
+    if(!!req.session.user === false){
+      return false;
+    } else if(req.cookies[code + '_playerID']) {
+      return true;
+    } else {
+      return false;
+    }
   },
 
   decodeBase64Image: function(dataString) {
@@ -91,7 +99,7 @@ module.exports = {
     console.log("When we create the player, the code is", code);
 
     // add this player to the database.
-    db.player.findOneAndUpdate({user_name: userName}, {user_name: userName, counted: false, game_code: code, started_drawing: true}, {upsert: true, 'new': true}, function (err, player) {
+    db.player.findOneAndUpdate({user_name: userName, game_code: code}, {user_name: userName, counted: false, game_code: code, started_drawing: true}, {upsert: true, 'new': true}, function (err, player) {
       // console.log("New player", userName, "Has been added to game:", code);
       // console.log("We are making cookies!");
       res.cookie(code + '_playerName', player.user_name, { maxAge: 900000, httpOnly: false});
@@ -128,6 +136,7 @@ module.exports = {
     console.log("-----------------------");
     console.log("getting the player session...");
     console.log("-----------------------");
+    console.log(req.cookies);
     var username = req.cookies[code + '_playerID'];
     console.log('username is', username);
     db.player.findOne({game_code: code, _id: username}, function(err, player) {
@@ -187,7 +196,7 @@ module.exports = {
       //increment number of submitted drawings
       gameObj.$inc = {'submission_count':1};
       //update the player to know they have been counted
-      db.player.findOneAndUpdate({user_name: player.user_name}, {counted: true}, {upsert: true, 'new': true}, function (err, player) {
+      db.player.findOneAndUpdate({user_name: player.user_name, game_code: gameCode}, {counted: true}, {upsert: true, 'new': true}, function (err, player) {
         console.log("Player count updated.");
       });
       //update the game with the new player information

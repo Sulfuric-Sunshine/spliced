@@ -113,12 +113,13 @@ form {
 }
 
 input {
-  width: 360px;
+  width: 80%;
   display: block;
   font-size: 13px;
   padding: 5px;
   margin-bottom: 5px;
 }
+
 
 input[type=url] {
   display: inline
@@ -201,4 +202,10 @@ h1 {
   background-size: 167px 76px;
   text-indent: -9999px;
   margin-top: 0;
+}
+
+.gameStatus {
+  width: 100%;
+  float: left;
+  margin-top: 2em;
 }

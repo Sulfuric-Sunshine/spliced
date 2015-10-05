@@ -43,15 +43,15 @@ angular.module('spliced.draw', [])
     1: "chest/upper torso",
     2: "lower body/legs",
     3: "feet"
-  }
+  };
 
   // This function grabs the canvas HTML element and turns it into a base64 encoded image -- that's what
   // `toDataURL() does`. Then it asks the Draw service to take the drawing, as well as the game code and cookie data
   // (just for kicks). Finally, on clicking save, the $scope.data.submitted property is set to true, which triggers
   // the success message.
 
-  $scope.save = function() { 
-    var image = document.getElementById("pwCanvasMain").toDataURL();  
+  $scope.save = function() {
+    var image = document.getElementById("pwCanvasMain").toDataURL();
     Draw.save(image, $scope.data.gameCode, $cookies.getAll());
     $scope.data.submitted = true;
     // send the image to the server.
@@ -65,16 +65,16 @@ angular.module('spliced.draw', [])
       if (response.data.hasOwnProperty("imageURL")) {
         // direct user to /result page
 
-      };
+      }
       var submittedDrawing = $scope.data.gameCode + '_submitted_drawing';
       if (response.data[submittedDrawing]) {
         console.log("You submitted a drawing!!!!");
-        console.log("Forwarding you to /#/game/:code/wait")
-        var newLocation = '/game/' + $scope.data.gameCode + '/wait';
+        console.log("Forwarding you to /#/game/:code/status");
+        var newLocation = '/game/' + $scope.data.gameCode + '/status';
         $location.path(newLocation);
       }
     });
-  }
+  };
 
 
 

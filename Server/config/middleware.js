@@ -49,7 +49,7 @@ module.exports = function (app, express) {
           res.send(finalImageURL);
         }, function(err) {
           console.log('There is no final image yet');
-          if (helpers.hasSession(req)) {
+          if (helpers.hasSession(req, gameCode)) {
             console.log("The player has a session");
             helpers.getPlayerSession(req, res, gameCode); 
           } else {
@@ -70,7 +70,7 @@ module.exports = function (app, express) {
       // invoke check final image before anything else ... and if the image doesn't exist, then do all the stuff in gameInProgressCallback 
 
       // if the user does not already have a session
-      if(!helpers.hasSession(req)){
+      if(!helpers.hasSession(req, code)){
 
         // create a session for the player.
         // query the database for the game using the game code
