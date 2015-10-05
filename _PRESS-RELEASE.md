@@ -17,28 +17,28 @@ Once the project moves into development, the press release can be used as a touc
  -->
  
 ## Heading ##
-  > Name the product in a way the reader (i.e. your target customers) will understand.
+  > Spliced: 
 
 ## Sub-Heading ##
-  > Describe who the market for the product is and what benefit they get. One sentence only underneath the title.
+  > Play exquisite corpses with your friends!
 
 ## Summary ##
-  > Give a summary of the product and the benefit. Assume the reader will not read anything else so make this paragraph good.
+  > Draw a person with your friends - each one of you gets a part - the head, the body, the legs, and the feet.  We will combine them all together for you so you can enjoy your creation!
 
 ## Problem ##
-  > Describe the problem your product solves.
+  > Moved a game played usually on paper to your phone.  Solves the problem of not having fun!
 
 ## Solution ##
-  > Describe how your product elegantly solves the problem.
+  > The product seamlessly moves 4 players into a game, provides a drawing canvas, and does the stitching of the four drawings together.
 
 ## Quote from You ##
-  > A quote from a spokesperson in your company.
+  > "The fastest way to generate laughs between four people addicted to their phones that I've ever seen.""
 
 ## How to Get Started ##
-  > Describe how easy it is to get started.
+  > Just hit spliced.herokuapp.com and follow the instructions!
 
 ## Customer Quote ##
-  > Provide a quote from a hypothetical customer that describes how they experienced the benefit.
+  > "I always wanted to see what someone looked like with a fishtank for a body!"
 
 ## Closing and Call to Action ##
-  > Wrap it up and give pointers where the reader should go next.
+  > Come and draw with us!
