@@ -1,4 +1,3 @@
-var app = require('./../server');
 var fs = require('fs');
 var gm = require('gm').subClass({imageMagick: true});
 var db = require('../DB/DB.js');
