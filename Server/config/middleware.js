@@ -79,7 +79,8 @@ module.exports = function (app, express) {
           // if the game doesn't exist, 404.
           if(!game){
             console.log("No game was found for code: ", code);
-            res.sendStatus(404);
+            var gameObj = {game_does_not_exist: true};
+            res.send(gameObj);
           // if the game DOES exist
           } else {
             console.log("Game player count is:", game.player_count, "For a game of:", game.num_players, "players");
