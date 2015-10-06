@@ -34,20 +34,25 @@ angular.module('spliced.services', [])
     .then(function(response){
       console.log("This is the response.data from registerPlayer()", response.data);
       var submittedDrawing = response.data[gameCode + '_submitted_drawing'];
-      if (submittedDrawing === true) {
-        var newUrl = '/game/' + gameCode + '/status';
-        $location.path(newUrl);
+      if (response.data.game_does_not_exist) {
+        console.log("The game does not exist");
+        $location.path('/');
       } else {
-        var newUrl = '/game/' + gameCode + '/draw';
-        $location.path(newUrl);
+        if (submittedDrawing === true) {
+          var newUrl = '/game/' + gameCode + '/status';
+          $location.path(newUrl);
+        } else {
+          var newUrl = '/game/' + gameCode + '/draw';
+          $location.path(newUrl);
+        }
+        if (response.data.imageURL){
+          console.log("Forwarding you to /#/game/:code/status");
+          var newLocation = '/game/' + gameCode + '/status';
+          $location.path(newLocation);
+        }
+        console.log(newUrl);
+        console.log(response);
       }
-      if (response.data.imageURL){
-        console.log("Forwarding you to /#/game/:code/status");
-        var newLocation = '/game/' + gameCode + '/status';
-        $location.path(newLocation);
-      }
-      console.log(newUrl);
-      console.log(response);
     }), function(err){
       console.log("There was an error registering the player", err);
     };
