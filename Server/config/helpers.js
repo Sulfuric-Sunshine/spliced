@@ -175,10 +175,10 @@ module.exports = {
 
   },
 
-  createNewGame: function(res){
+  createNewGame: function(playerCount, res){
     var code = this.createUniqueGameCode();
     var randomTemplateNumber = Math.floor(Math.random() * 5);
-    var game = new db.game({game_code: code, num_players: 4, player_count: 0, submission_count: 0, game_started: true, drawing_finished: false, 0: null, 1: null, 2: null, 3: null, template: randomTemplateNumber}).save();
+    var game = new db.game({game_code: code, num_players: playerCount, player_count: 0, submission_count: 0, game_started: true, drawing_finished: false, 0: null, 1: null, 2: null, 3: null, template: randomTemplateNumber}).save();
     console.log("the unique code is:" + code);
     res.send(code);
   },

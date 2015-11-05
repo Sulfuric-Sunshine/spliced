@@ -27,8 +27,9 @@ module.exports = function (app, express) {
 
 
 
-  app.get('/game', function(req, res){
-    helpers.createNewGame(res);
+  app.get('/newgame/:playerCount', function(req, res){
+    var playerCount = req.params.playerCount;
+    helpers.createNewGame(playerCount, res);
   });
 
   app.get('/game/:gameCode/status', function(req, res){

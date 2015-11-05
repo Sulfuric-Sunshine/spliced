@@ -18,10 +18,10 @@ angular.module('spliced.services', [])
   };
 
   // This makes a GET request to the game, which returns a game code to us
-  services.createGame = function(callback) {
-    $http.get('/game')
+  services.createGame = function(playerCount, callback) {
+    $http.get('/newgame/' + playerCount)
     .then(function (gameCode) {
-      callback(gameCode.data)
+      callback(gameCode.data);
     }, function(err) {
       console.log('There was an error getting the game code.');
     });
