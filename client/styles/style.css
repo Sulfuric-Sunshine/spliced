@@ -96,6 +96,9 @@ h1 {
   margin-top: 2em;
 }
 
+.user-message {
+  width: 400px;
+}
 
 @media (max-width: 400px) {
   img {

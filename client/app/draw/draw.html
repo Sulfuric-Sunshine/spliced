@@ -1,6 +1,7 @@
 <div id='draw'> 
   <div class="drawing-area" ng-hide="data.submitted">
-    You are drawing the {{ data.bodyPart[data.userId] }}! 
+    <p class="user-message">You are drawing the {{ data.bodyPart[data.userId] }}!</p>
+    <p class="user-message">{{ data.instructions[data.userId] }}!</p>
     <div pw-canvas options="{undo: true, width: 400, height: 200, color: '#000', lineWidth: 4, imageSrc: data.templateSrc}" ng-model="data.drawing" class="canvas-container" version="data.drawing.version"></div>
     <a class="button" ng-click="save()">Save Drawing</a>
     <a ng-click="undo()" class="button minor">Undo</a>
