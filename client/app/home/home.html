@@ -2,8 +2,13 @@
   <p>
     Welcome to Spliced, the game that lets you draw an exquisite corpse with your friends. To start, click the Create Game button below!
   </p>
+  <div>
+    <select name="playerCount" ng-model="playerCount">
+      <option value="4">4 Players</option>
+      <option value="2">2 Players</option>
+    </select>
+  </div>
   <a class="button" ng-click="createGame()">Create Game</a>
-
   <div class="enter-code-form">
     <p>If you have a game code, enter it here:</p>
     <input type="text" placeholder="Your code" ng-model="gameCode" />

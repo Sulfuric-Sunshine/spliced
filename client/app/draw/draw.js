@@ -13,12 +13,12 @@ angular.module('spliced.draw', [])
 
   $scope.undo = function() { 
     $scope.data.drawing.version--;
-  } 
+  };
 
   // If the image has been submitted, we'll show the user a success message
 
   $scope.data.submitted = $scope.data.submitted || false;
-  $scope.data.success = "Success! Your image has been submitted!"
+  $scope.data.success = "Success! Your image has been submitted!";
 
   // This grabs the game code, generated at the home screen, and passes it into our save function.
 
