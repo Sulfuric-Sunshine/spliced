@@ -40,10 +40,17 @@ angular.module('spliced.draw', [])
   // We need this so we can tell the user which part of the drawing they're using. Check out {{ data.bodyPart[data.userId] }}. 
   $scope.data.bodyPart = {
     0: "head",
-    1: "chest/upper torso",
+    1: "arms/chest/upper torso",
     2: "lower body/legs",
     3: "feet"
   };
+
+  $scope.data.instructions = {
+    0: "Make a neck that ends where the black markers start so your friend can connect the torso",
+    1: "Connect the arms/torso to the base of the neck where the black markers at the top begin. Don't forget to leave some room for your friend to connect the legs where the black markers at the bottom start",
+    2: "Connect the legs to the base of the arms/torso where the black markers at the top begin. Don't forget to leave room for your friend drawing the feet where the black markers start at the bottom start",
+    3: "Connect the feet to the base of the legs where the black markers start"
+  }
 
   // This function grabs the canvas HTML element and turns it into a base64 encoded image -- that's what
   // `toDataURL() does`. Then it asks the Draw service to take the drawing, as well as the game code and cookie data
