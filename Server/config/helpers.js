@@ -1,8 +1,15 @@
 var fs = require('fs');
 var gm = require('gm').subClass({imageMagick: true});
 var db = require('../DB/DB.js');
+var path = require('path');
 var session = require('express-session');
 var cookieParser = require('cookie-parser');
+var Parse = require('node-parse-api').Parse;
+var parseConfig = require('./config');
+
+var APP_ID = parseConfig.app_id;
+var MASTER_KEY = parseConfig.master_key;
+var parseApp = new Parse(APP_ID, MASTER_KEY);
 
 
 module.exports = {
@@ -50,24 +57,26 @@ module.exports = {
     console.log("makeImages was invoked... making images");
     console.log("---------");
 
+    var finalImageURL = 'client/uploads/' + gameCode + '.png';
     var readStream = fs.createReadStream("Server/assets/drawings/" + gameCode + "0.png");
     // using http://aheckmann.github.io/gm/docs.html#append
-
     gm(readStream)
     //This is not scalable for N players.  You'll need to append these in some kind of loop.
     .append("Server/assets/drawings/" + gameCode + "1.png", "Server/assets/drawings/" + gameCode + "2.png", "Server/assets/drawings/" + gameCode + "3.png")
-    .write('client/uploads/' + gameCode + '.png', function (err) {
+    .write(finalImageURL, function (err) {
       console.log("Streaming the image now");
       if (err) {
         console.log("There was an error creating the exquisite corpse:", err);
       } else {
         console.log("The exquisite corpse was combined successfuly!");
-        db.game.findOneAndUpdate({ game_code: gameCode }, {drawing_finished: true}, function(err, game) {
-          if (err) {
-            console.log("There was an error updating the drawing_finished property on the game in the DB.");
-          } else {
-            console.log("Great! The drawing_finished property was successfully updated.");
-          }
+        module.exports.uploadImageToParse(gameCode, finalImageURL, function(finalImageURL) {
+          db.game.findOneAndUpdate({ game_code: gameCode }, {final_image_url: finalImageURL}, {drawing_finished: true}, function(err, game) {
+            if (err) {
+              console.log("There was an error updating the drawing_finished property on the game in the DB.");
+            } else {
+              console.log("Great! The drawing_finished property was successfully updated. The image on Parse is at", finalImageURL);
+            }
+          });
         });
       }
 
@@ -243,5 +252,30 @@ module.exports = {
       // if the drawing got messed up or never got completed
         // we will try to draw it again.
     }
+  },
+
+  uploadImageToParse: function(gameCode, imageURL, callback) {
+    module.exports.createBufferFromImage(imageURL, function(buffered) {
+      parseApp.insertFile(gameCode + '.png', buffered, 'image/png', function (err, response) {
+        if (err) {
+          console.log("There was an error uploading to Parse", err);
+        }
+        console.log("The image was uploaded to Parse and is at:", response.url);
+        callback(response.url);
+      });
+
+    })
+
+  },
+
+  createBufferFromImage: function(image, callback) {
+    fs.readFile(image, function(err, readData) {
+      if (err) {
+        console.log("There was an error reading the image and creating a buffer", err); 
+      } else {
+        var buffered = new Buffer(readData);
+        callback(buffered);
+      }
+    })
   }
 }

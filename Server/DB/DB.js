@@ -20,7 +20,8 @@ var gameSchema = new Schema({
   3 : String,
   template: Number,
   game_started: Boolean,
-  drawing_finished: Boolean
+  drawing_finished: Boolean,
+  final_image_url: String
 });
 
 var playerSchema = new Schema({
