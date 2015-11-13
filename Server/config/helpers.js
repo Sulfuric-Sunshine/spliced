@@ -13,6 +13,7 @@ var parseApp = new Parse(APP_ID, MASTER_KEY);
 
 
 module.exports = {
+  dbLock: {},
   errorLogger: function (error, req, res, next) {
     // log the error then send it to the next middleware in
     // middleware.js
@@ -59,11 +60,13 @@ module.exports = {
 
     var finalImageURL = 'client/uploads/' + gameCode + '.png';
     var readStream = fs.createReadStream("Server/assets/drawings/" + gameCode + "0.png");
+    var myArgs = [];
+    var gmObj = gm(readStream).append("Server/assets/drawings/" + gameCode + "1.png");
+    for(var i = 2; i < numPlayers; i ++){
+      gmObj = gmObj.append("Server/assets/drawings/" + gameCode + i + ".png");
+    }
     // using http://aheckmann.github.io/gm/docs.html#append
-    gm(readStream)
-    //This is not scalable for N players.  You'll need to append these in some kind of loop.
-    .append("Server/assets/drawings/" + gameCode + "1.png", "Server/assets/drawings/" + gameCode + "2.png", "Server/assets/drawings/" + gameCode + "3.png")
-    .write(finalImageURL, function (err) {
+    gmObj.write(finalImageURL, function (err) {
       console.log("Streaming the image now");
       if (err) {
         console.log("There was an error creating the exquisite corpse:", err);
@@ -106,38 +109,49 @@ module.exports = {
 
     var userName = game.player_count;
     console.log("When we create the player, the code is", code);
-
-    // add this player to the database.
-    db.player.findOneAndUpdate({user_name: userName, game_code: code}, {user_name: userName, counted: false, game_code: code, started_drawing: true}, {upsert: true, 'new': true}, function (err, player) {
-      // console.log("New player", userName, "Has been added to game:", code);
-      // console.log("We are making cookies!");
-      res.cookie(code + '_playerName', player.user_name, { maxAge: 900000, httpOnly: false});
-      res.cookie(code + '_playerID', player._id,{ maxAge: 900000, httpOnly: false});
-      res.cookie(code, true, { maxAge: 900000, httpOnly: false});
-      req.session.user = player._id;
-      // console.log("The cookies are:", res.cookie);
-      // once the player has been added, we'll update the game table with the new player's info
-      // this update also includes count++
-      // console.log("We're creating the player. the Player is:", player);
-      var gameObj = {};
-      gameObj.$inc = {'player_count':1};
-      gameObj[userName] = player.id;
-      console.log("Console logging gameObj", gameObj);
-      db.game.findOneAndUpdate({game_code: code}, gameObj, function(err, game){
-        if(err){
-          console.log(err);
-        } else {
-          // console.log("GET GAME: This is the game data", game);
-          // send game back to client.
-          res.cookie('templateId', game.template,{ maxAge: 900000, httpOnly: false});
-          res.send({game: game, player: player});
-          if(callback){
-            callback(player);
+    console.log("the dbLock: ", module.exports.dbLock[code]);
+    if(module.exports.dbLock[code]){
+      setTimeout(function(){
+        console.log("A player is waiting to enter the game.").
+        createPlayer(req, res, game, code, callback);
+      }, 50);
+    } else{
+      console.log("Locking the game while the player is created");
+      module.exports.dbLock[code] = true;
+      console.log(module.exports.dbLock[code]);
+      // add this player to the database.
+      db.player.findOneAndUpdate({user_name: userName, game_code: code}, {user_name: userName, counted: false, game_code: code, started_drawing: true}, {upsert: true, 'new': true}, function (err, player) {
+        // console.log("New player", userName, "Has been added to game:", code);
+        // console.log("We are making cookies!");
+        res.cookie(code + '_playerName', player.user_name, { maxAge: 900000, httpOnly: false});
+        res.cookie(code + '_playerID', player._id,{ maxAge: 900000, httpOnly: false});
+        res.cookie(code, true, { maxAge: 900000, httpOnly: false});
+        req.session.user = player._id;
+        // console.log("The cookies are:", res.cookie);
+        // once the player has been added, we'll update the game table with the new player's info
+        // this update also includes count++
+        // console.log("We're creating the player. the Player is:", player);
+        var gameObj = {};
+        gameObj.$inc = {'player_count':1};
+        gameObj[userName] = player.id;
+        console.log("Console logging gameObj", gameObj);
+        db.game.findOneAndUpdate({game_code: code}, gameObj, function(err, game){
+          if(err){
+            console.log(err);
+          } else {
+            // console.log("GET GAME: This is the game data", game);
+            // send game back to client.
+            res.cookie('templateId', game.template,{ maxAge: 900000, httpOnly: false});
+            res.send({game: game, player: player});
+            if(callback){
+              callback(player);
+            }
           }
-        }
 
+        });
       });
-    });
+      this.dbLock[code] = false;
+    }
   },
 
   getPlayerSession: function(req, res, code) {
@@ -189,14 +203,15 @@ module.exports = {
     var templateNumber;
     // var players;
     if (playerCount === "4") {
-      templateNumber = Math.floor(Math.random() * 5);
+      templateNumber = Math.floor(Math.random() * 4);
       // players = {0: null, 1: null, 2: null, 3: null};
     } else if (playerCount === "2") {
-      templateNumber = 5;
+      templateNumber = 4;
       // players = {0: null, 1: null};
     }
     var game = new db.game({game_code: code, num_players: playerCount, player_count: 0, submission_count: 0, game_started: true, drawing_finished: false, 0: null, 1: null, 2: null, 3: null, template: templateNumber}).save();
     console.log("the unique code is:" + code);
+    module.exports.dbLock[code] = false;
     res.send(code);
   },
 
