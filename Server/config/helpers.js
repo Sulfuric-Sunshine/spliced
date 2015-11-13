@@ -73,7 +73,7 @@ module.exports = {
       } else {
         console.log("The exquisite corpse was combined successfuly!");
         module.exports.uploadImageToParse(gameCode, finalImageURL, function(finalImageURL) {
-          db.game.findOneAndUpdate({ game_code: gameCode }, {final_image_url: finalImageURL}, {drawing_finished: true}, function(err, game) {
+          db.game.findOneAndUpdate({ game_code: gameCode }, {final_image_url: finalImageURL, drawing_finished: true}, function(err, game) {
             if (err) {
               console.log("There was an error updating the drawing_finished property on the game in the DB.");
             } else {
