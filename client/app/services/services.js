@@ -2,7 +2,7 @@ angular.module('spliced.services', [])
 
 .factory('Draw', function($http, $location) {
   var services = {};
-
+  services.playerCounts = {};
   // This makes a POST request and sends the image, as well as cookie data, back to the server.
   services.save = function(image, gameCode, cookieData) {
     console.log("Inside services, the image is", image);
@@ -21,6 +21,8 @@ angular.module('spliced.services', [])
   services.createGame = function(playerCount, callback) {
     $http.get('/newgame/' + playerCount)
     .then(function (gameCode) {
+      console.log(gameCode.data);
+      services.playerCounts[gameCode.data] = playerCount;
       callback(gameCode.data);
     }, function(err) {
       console.log('There was an error getting the game code.');
@@ -28,7 +30,7 @@ angular.module('spliced.services', [])
   };
 
   // This makes a POST request to the server and takes the user to the /draw page if
-  // the player was successfully registered. 
+  // the player was successfully registered.
   services.registerPlayer = function(gameCode, callback){
     $http.get('/game/' + gameCode )
     .then(function(response){
@@ -56,6 +58,11 @@ angular.module('spliced.services', [])
     }), function(err){
       console.log("There was an error registering the player", err);
     };
+  };
+
+  //returns the player count for that particular game.
+  services.getCount = function(gameCode){
+    return services.playerCounts[gameCode];
   };
 
   // This gets the game status. If the game doesn't exist, then it'll redirect the user back to
