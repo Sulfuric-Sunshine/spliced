@@ -22,7 +22,6 @@ a.button {
   color: #fff;
   cursor: pointer;
   margin-top: 10px;
-  float: left;
   margin-right: 10px;
 }
 
@@ -53,6 +52,17 @@ input {
   font-size: 13px;
   padding: 5px;
   margin-bottom: 5px;
+}
+
+#divButton1 {
+  margin-top: 20px;
+  margin-left: 5px;
+
+}
+
+#divButton2 {
+  margin-top: 30px;
+  margin-left: 5px;
 }
 
 .canvas-container canvas {
