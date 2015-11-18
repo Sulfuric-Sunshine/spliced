@@ -35,6 +35,7 @@ angular.module('spliced.services', [])
     $http.get('/game/' + gameCode )
     .then(function(response){
       console.log("This is the response.data from registerPlayer()", response.data);
+      services.playerCounts[gameCode] = response.data.game.num_players;
       var submittedDrawing = response.data[gameCode + '_submitted_drawing'];
       if (response.data.game_does_not_exist) {
         console.log("The game does not exist");
@@ -68,7 +69,6 @@ angular.module('spliced.services', [])
   // This gets the game status. If the game doesn't exist, then it'll redirect the user back to
   // home (#).
   services.getGameStatus = function(gameCode, callback) {
-    console.log("Getting game data...");
 
     $http.get('/game/' + gameCode + '/status')
     .then(function(response){
